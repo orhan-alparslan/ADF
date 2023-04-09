@@ -1,0 +1,19 @@
+{
+	"name": "R_Conditions",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_polygon_options_free_01",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "input/rest"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "v3/reference/conditions?asset_class=stocks&apiKey="
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

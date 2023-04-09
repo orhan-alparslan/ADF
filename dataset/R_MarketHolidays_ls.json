@@ -1,0 +1,19 @@
+{
+	"name": "R_MarketHolidays_ls",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_polygon_stocks_free_01",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "input/rest"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "v1/marketstatus/upcoming?apiKey="
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

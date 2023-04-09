@@ -1,0 +1,39 @@
+{
+	"name": "lookup_urls",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup_urls",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT DISTINCT url_ex_api_key \nFROM urls_polygon \nWHERE url_ex_api_key IS NOT NULL",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sqldb",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
+		"folder": {
+			"name": "staging"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-03-23T23:33:38Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

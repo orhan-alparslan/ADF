@@ -1,0 +1,19 @@
+{
+	"name": "R_TickerNews",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_polygon_stocks_free_01",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "input/rest"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "https://api.polygon.io/v2/reference/news?order=desc&sort=published_utc&apiKey="
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,207 @@
+{
+	"name": "fact_stocks",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy API to Table fact_stocks_grouped_daily_bars",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET",
+						"additionalHeaders": {
+							"Authorization": {
+								"value": "@pipeline().parameters.Key",
+								"type": "Expression"
+							}
+						},
+						"paginationRules": {
+							"supportRFC5988": "true"
+						}
+					},
+					"sink": {
+						"type": "AzureTableSink",
+						"azureTableInsertType": "merge",
+						"writeBatchSize": 10000
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['results'][0]['id']"
+								},
+								"sink": {
+									"name": "id"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['publisher']['name']"
+								},
+								"sink": {
+									"name": "publisher_name"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['publisher']['homepage_url']"
+								},
+								"sink": {
+									"name": "publisher_url"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['publisher']['logo_url']"
+								},
+								"sink": {
+									"name": "publisher_logo_url"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['publisher']['favicon_url']"
+								},
+								"sink": {
+									"name": "publisher_favicon_url"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['title']"
+								},
+								"sink": {
+									"name": "title"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['author']"
+								},
+								"sink": {
+									"name": "author"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['published_utc']"
+								},
+								"sink": {
+									"name": "published_utc"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['article_url']"
+								},
+								"sink": {
+									"name": "article_url"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['tickers'][0]"
+								},
+								"sink": {
+									"name": "tickers"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['image_url']"
+								},
+								"sink": {
+									"name": "image_url"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['description']"
+								},
+								"sink": {
+									"name": "description"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['keywords'][0]"
+								},
+								"sink": {
+									"name": "keywords"
+								}
+							},
+							{
+								"source": {
+									"path": "$['status']"
+								},
+								"sink": {
+									"name": "status"
+								}
+							},
+							{
+								"source": {
+									"path": "$['request_id']"
+								},
+								"sink": {
+									"name": "request_id"
+								}
+							},
+							{
+								"source": {
+									"path": "$['count']"
+								},
+								"sink": {
+									"name": "count"
+								}
+							},
+							{
+								"source": {
+									"path": "$['next_url']"
+								},
+								"sink": {
+									"name": "next_url"
+								}
+							}
+						],
+						"collectionReference": "$['results']",
+						"mapComplexValuesToString": true
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "R_fact_stocks_grouped_daily_bars",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "factstocksgroupeddailybars",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"parameters": {
+			"Key": {
+				"type": "string",
+				"defaultValue": "Bearer ggy3O7h99L1pGBwmY2ulfmV1Jk9yQ1OD"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-03-21T20:56:23Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,27 @@
+{
+	"name": "ls_polygon_options_free_01",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://api.polygon.io/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous",
+			"authHeaders": {
+				"Authorization": {
+					"type": "AzureKeyVaultSecret",
+					"store": {
+						"referenceName": "Polygon_keyvault_LS",
+						"type": "LinkedServiceReference"
+					},
+					"secretName": "Polygon-auth-header-options-free"
+				}
+			}
+		},
+		"connectVia": {
+			"referenceName": "integrationRuntime-interactive",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

@@ -1,0 +1,16 @@
+{
+	"name": "ds_rest_forex_free",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_polygon_forex_free_01",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "input/rest/free"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

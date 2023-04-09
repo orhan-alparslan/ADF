@@ -1,0 +1,18 @@
+{
+	"name": "ls_ats_ak_01",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureTableStorage",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "Polygon_keyvault_LS",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "blobstorage-polygon38-connection-string"
+			}
+		}
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"name": "factstocksgroupeddailybars",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ats_ak_01",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "fact"
+		},
+		"annotations": [],
+		"type": "AzureTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "factstocksgroupeddailybars"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

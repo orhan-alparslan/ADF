@@ -1,0 +1,9 @@
+{
+	"name": "Polygon38",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d9f99e63-5f8e-407b-b439-09cbbab01422",
+		"tenantId": "6b707dd9-3053-4c14-bf03-b99545cfc7c3"
+	}
+}

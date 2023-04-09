@@ -1,0 +1,19 @@
+{
+	"name": "R_TickerTypes",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_polygon_stocks_free_01",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "input/rest"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "https://api.polygon.io/v3/reference/tickers/types?locale=global&apiKey="
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
