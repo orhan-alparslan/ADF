@@ -2,7 +2,7 @@
 	"name": "R_fact_stocks_grouped_daily_bars",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_polygon_options_free_01",
+			"referenceName": "ls_polygon_stocks_free_01",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
@@ -11,7 +11,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&apiKey="
+			"relativeUrl": "https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true"
 		},
 		"schema": []
 	},

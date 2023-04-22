@@ -1,0 +1,21 @@
+{
+	"name": "ds_adls2_parq",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls2_ak_01",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "output"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
