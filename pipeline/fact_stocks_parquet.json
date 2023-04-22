@@ -36,11 +36,20 @@
 						"mappings": [
 							{
 								"source": {
+									"path": "$['ticker']"
+								},
+								"sink": {
+									"name": "ticker",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
 									"path": "$['queryCount']"
 								},
 								"sink": {
 									"name": "queryCount",
-									"type": "String"
+									"type": "Int64"
 								}
 							},
 							{
@@ -49,7 +58,7 @@
 								},
 								"sink": {
 									"name": "resultsCount",
-									"type": "String"
+									"type": "Int64"
 								}
 							},
 							{
@@ -58,15 +67,6 @@
 								},
 								"sink": {
 									"name": "adjusted",
-									"type": "Boolean"
-								}
-							},
-							{
-								"source": {
-									"path": "$['results'][0]['T']"
-								},
-								"sink": {
-									"name": "T",
 									"type": "String"
 								}
 							},
@@ -76,7 +76,7 @@
 								},
 								"sink": {
 									"name": "v",
-									"type": "String"
+									"type": "Decimal"
 								}
 							},
 							{
@@ -85,7 +85,7 @@
 								},
 								"sink": {
 									"name": "vw",
-									"type": "String"
+									"type": "Decimal"
 								}
 							},
 							{
@@ -94,7 +94,7 @@
 								},
 								"sink": {
 									"name": "o",
-									"type": "String"
+									"type": "Decimal"
 								}
 							},
 							{
@@ -103,7 +103,7 @@
 								},
 								"sink": {
 									"name": "c",
-									"type": "String"
+									"type": "Decimal"
 								}
 							},
 							{
@@ -112,7 +112,7 @@
 								},
 								"sink": {
 									"name": "h",
-									"type": "String"
+									"type": "Decimal"
 								}
 							},
 							{
@@ -121,7 +121,16 @@
 								},
 								"sink": {
 									"name": "l",
-									"type": "String"
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['t']"
+								},
+								"sink": {
+									"name": "t",
+									"type": "Int64"
 								}
 							},
 							{
@@ -130,7 +139,7 @@
 								},
 								"sink": {
 									"name": "n",
-									"type": "String"
+									"type": "Int64"
 								}
 							},
 							{
@@ -157,17 +166,17 @@
 								},
 								"sink": {
 									"name": "count",
-									"type": "String"
+									"type": "Int64"
 								}
 							}
 						],
 						"collectionReference": "$['results']",
-						"mapComplexValuesToString": true
+						"mapComplexValuesToString": false
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "R_fact_stocks_grouped_daily_bars",
+						"referenceName": "R_fact_stocks_aggregates",
 						"type": "DatasetReference"
 					}
 				],

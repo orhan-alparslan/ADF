@@ -1,0 +1,19 @@
+{
+	"name": "R_fact_stocks_aggregates",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_polygon_stocks_free_01",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "input/rest"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "v2/aggs/ticker/AAPL/range/1/day/2023-01-09/2023-01-09?adjusted=true&sort=asc&limit=120"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
