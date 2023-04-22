@@ -11,7 +11,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true"
+			"relativeUrl": "v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true"
 		},
 		"schema": []
 	},
