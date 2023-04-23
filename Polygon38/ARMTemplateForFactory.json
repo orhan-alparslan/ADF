@@ -1397,7 +1397,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy API to Table fact_stocks_grouped_daily_bars_copy1",
+						"name": "fact_stocks_grouped_daily_bars",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -1579,7 +1579,14 @@
 							{
 								"referenceName": "ds_adls2_parq_stocks",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"ds_fileSystemName": {
+										"value": "@pipeline().parameters.pipe_fileSystemName",
+										"type": "Expression"
+									},
+									"ds_fileName": "fact_stocks_grouped_daily_bars",
+									"ds_directoryName": "fact"
+								}
 							}
 						]
 					}
@@ -1587,6 +1594,11 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"parameters": {
+					"pipe_fileSystemName": {
+						"type": "String"
+					}
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-03-23T19:14:06Z"
@@ -2330,6 +2342,17 @@
 					"referenceName": "ls_adls2_ak_01",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"ds_fileSystemName": {
+						"type": "string"
+					},
+					"ds_fileName": {
+						"type": "string"
+					},
+					"ds_directoryName": {
+						"type": "string"
+					}
+				},
 				"folder": {
 					"name": "output"
 				},
@@ -2338,7 +2361,18 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileSystem": "stocks"
+						"fileName": {
+							"value": "@dataset().ds_fileName",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().ds_directoryName",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_fileSystemName",
+							"type": "Expression"
+						}
 					},
 					"compressionCodec": "snappy"
 				},

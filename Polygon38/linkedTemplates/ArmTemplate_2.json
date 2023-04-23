@@ -441,7 +441,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy API to Table fact_stocks_grouped_daily_bars_copy1",
+						"name": "fact_stocks_grouped_daily_bars",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -623,7 +623,14 @@
 							{
 								"referenceName": "ds_adls2_parq_stocks",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"ds_fileSystemName": {
+										"value": "@pipeline().parameters.pipe_fileSystemName",
+										"type": "Expression"
+									},
+									"ds_fileName": "fact_stocks_grouped_daily_bars",
+									"ds_directoryName": "fact"
+								}
 							}
 						]
 					}
@@ -631,6 +638,11 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"parameters": {
+					"pipe_fileSystemName": {
+						"type": "String"
+					}
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-03-23T19:14:06Z"
