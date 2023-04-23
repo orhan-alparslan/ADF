@@ -27,6 +27,14 @@
 				"fileName": {
 					"value": "@dataset().ds_fileName",
 					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().ds_directoryName",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().ds_fileSystemName",
+					"type": "Expression"
 				}
 			},
 			"compressionCodec": "snappy"
