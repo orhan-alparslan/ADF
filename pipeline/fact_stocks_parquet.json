@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy API to Table fact_stocks_grouped_daily_bars_copy1",
+				"name": "fact_stocks_grouped_daily_bars",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -24,7 +24,13 @@
 					"sink": {
 						"type": "ParquetSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
+							"type": "AzureBlobFSWriteSettings",
+							"metadata": [
+								{
+									"name": "Copy_name",
+									"value": "fact_stocks_grouped_daily_bars"
+								}
+							]
 						},
 						"formatSettings": {
 							"type": "ParquetWriteSettings"
