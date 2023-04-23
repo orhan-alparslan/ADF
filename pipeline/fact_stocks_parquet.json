@@ -188,12 +188,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"pTriggerFile": {
-				"type": "string",
-				"defaultValue": "grouped_daily_bars"
-			}
-		},
 		"annotations": [],
 		"lastPublishTime": "2023-03-23T19:14:06Z"
 	},
