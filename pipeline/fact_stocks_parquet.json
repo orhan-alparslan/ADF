@@ -185,7 +185,7 @@
 						"referenceName": "ds_adls2_parq_stocks",
 						"type": "DatasetReference",
 						"parameters": {
-							"ds_folderName": "stocks",
+							"ds_fileSystemName": "stocks",
 							"ds_fileName": "fact_stocks_grouped_daily_bars"
 						}
 					}
