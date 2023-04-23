@@ -186,7 +186,8 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_fileSystemName": "stocks",
-							"ds_fileName": "fact_stocks_grouped_daily_bars"
+							"ds_fileName": "fact_stocks_grouped_daily_bars",
+							"ds_directoryName": "fact"
 						}
 					}
 				]
