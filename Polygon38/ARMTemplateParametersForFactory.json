@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "Polygon38"
+		},
+		"ls_adls2_ak_01_accountKey": {
+			"value": ""
+		},
+		"ls_sqldb_ak_01_connectionString": {
+			"value": ""
+		},
+		"Polygon_LS_properties_typeProperties_url": {
+			"value": "https://api.polygon.io/"
+		},
+		"Polygon_keyvault_LS_properties_typeProperties_baseUrl": {
+			"value": "https://keyssigmabi.vault.azure.net/"
+		},
+		"ls_adls2_ak_01_properties_typeProperties_url": {
+			"value": "https://polygon38.dfs.core.windows.net/"
+		},
+		"ls_ats_ak_01_properties_typeProperties_connectionString_secretName": {
+			"value": "blobstorage-polygon38-connection-string"
+		},
+		"ls_polygon_forex_free_01_properties_typeProperties_url": {
+			"value": "https://api.polygon.io/"
+		},
+		"ls_polygon_options_free_01_properties_typeProperties_url": {
+			"value": "https://api.polygon.io/"
+		},
+		"ls_polygon_stocks_free_01_properties_typeProperties_url": {
+			"value": "https://api.polygon.io/"
+		}
+	}
+}

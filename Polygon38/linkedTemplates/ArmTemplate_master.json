@@ -1,0 +1,145 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "Polygon38"
+		},
+		"ls_adls2_ak_01_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adls2_ak_01'"
+		},
+		"ls_sqldb_ak_01_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sqldb_ak_01'"
+		},
+		"Polygon_LS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.polygon.io/"
+		},
+		"Polygon_keyvault_LS_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://keyssigmabi.vault.azure.net/"
+		},
+		"ls_adls2_ak_01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://polygon38.dfs.core.windows.net/"
+		},
+		"ls_ats_ak_01_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "blobstorage-polygon38-connection-string"
+		},
+		"ls_polygon_forex_free_01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.polygon.io/"
+		},
+		"ls_polygon_options_free_01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.polygon.io/"
+		},
+		"ls_polygon_stocks_free_01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.polygon.io/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "Polygon38_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_adls2_ak_01_accountKey": {
+						"value": "[parameters('ls_adls2_ak_01_accountKey')]"
+					},
+					"Polygon_keyvault_LS_properties_typeProperties_baseUrl": {
+						"value": "[parameters('Polygon_keyvault_LS_properties_typeProperties_baseUrl')]"
+					},
+					"ls_adls2_ak_01_properties_typeProperties_url": {
+						"value": "[parameters('ls_adls2_ak_01_properties_typeProperties_url')]"
+					},
+					"Polygon_LS_properties_typeProperties_url": {
+						"value": "[parameters('Polygon_LS_properties_typeProperties_url')]"
+					},
+					"ls_ats_ak_01_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('ls_ats_ak_01_properties_typeProperties_connectionString_secretName')]"
+					},
+					"ls_polygon_forex_free_01_properties_typeProperties_url": {
+						"value": "[parameters('ls_polygon_forex_free_01_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "Polygon38_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_sqldb_ak_01_connectionString": {
+						"value": "[parameters('ls_sqldb_ak_01_connectionString')]"
+					},
+					"ls_polygon_options_free_01_properties_typeProperties_url": {
+						"value": "[parameters('ls_polygon_options_free_01_properties_typeProperties_url')]"
+					},
+					"ls_polygon_stocks_free_01_properties_typeProperties_url": {
+						"value": "[parameters('ls_polygon_stocks_free_01_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'Polygon38_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "Polygon38_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'Polygon38_ArmTemplate_1')]"
+			]
+		}
+	]
+}

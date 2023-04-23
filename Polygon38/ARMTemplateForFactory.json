@@ -1,0 +1,2752 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "Polygon38"
+		},
+		"ls_adls2_ak_01_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adls2_ak_01'"
+		},
+		"ls_sqldb_ak_01_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sqldb_ak_01'"
+		},
+		"Polygon_LS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.polygon.io/"
+		},
+		"Polygon_keyvault_LS_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://keyssigmabi.vault.azure.net/"
+		},
+		"ls_adls2_ak_01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://polygon38.dfs.core.windows.net/"
+		},
+		"ls_ats_ak_01_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "blobstorage-polygon38-connection-string"
+		},
+		"ls_polygon_forex_free_01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.polygon.io/"
+		},
+		"ls_polygon_options_free_01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.polygon.io/"
+		},
+		"ls_polygon_stocks_free_01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.polygon.io/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/dim')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table Conditions",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['results'][0]['id']"
+										},
+										"sink": {
+											"name": "ID"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['type']"
+										},
+										"sink": {
+											"name": "Type"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['name']"
+										},
+										"sink": {
+											"name": "Name"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['asset_class']"
+										},
+										"sink": {
+											"name": "Asset_Class"
+										}
+									}
+								],
+								"collectionReference": "$['results']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_Conditions",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Conditions",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy API to Table Exchanges",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "ID"
+										}
+									},
+									{
+										"source": {
+											"path": "[['type']"
+										},
+										"sink": {
+											"name": "Type"
+										}
+									},
+									{
+										"source": {
+											"path": "[['asset_class']"
+										},
+										"sink": {
+											"name": "Asset_Class"
+										}
+									},
+									{
+										"source": {
+											"path": "[['locale']"
+										},
+										"sink": {
+											"name": "Locale"
+										}
+									},
+									{
+										"source": {
+											"path": "[['name']"
+										},
+										"sink": {
+											"name": "Name"
+										}
+									},
+									{
+										"source": {
+											"path": "[['mic']"
+										},
+										"sink": {
+											"name": "Mic"
+										}
+									},
+									{
+										"source": {
+											"path": "[['operating_mic']"
+										},
+										"sink": {
+											"name": "Operating_mic"
+										}
+									},
+									{
+										"source": {
+											"path": "[['participant_id']"
+										},
+										"sink": {
+											"name": "Participant_ID"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_Exchanges",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Exchanges",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy API to Table MarketHolidays",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['date']"
+										},
+										"sink": {
+											"name": "date"
+										}
+									},
+									{
+										"source": {
+											"path": "$['exchange']"
+										},
+										"sink": {
+											"name": "exchange"
+										}
+									},
+									{
+										"source": {
+											"path": "$['name']"
+										},
+										"sink": {
+											"name": "name"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									}
+								],
+								"collectionReference": "",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_MarketHolidays",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "MarketHolidays",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy API to Table MarketStatus",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['afterHours']"
+										},
+										"sink": {
+											"name": "afterHours"
+										}
+									},
+									{
+										"source": {
+											"path": "$['currencies']['crypto']"
+										},
+										"sink": {
+											"name": "currencies"
+										}
+									},
+									{
+										"source": {
+											"path": "$['currencies']['fx']"
+										},
+										"sink": {
+											"name": "fx"
+										}
+									},
+									{
+										"source": {
+											"path": "$['earlyHours']"
+										},
+										"sink": {
+											"name": "earlyHours"
+										}
+									},
+									{
+										"source": {
+											"path": "$['exchanges']['nasdaq']"
+										},
+										"sink": {
+											"name": "nasdaq"
+										}
+									},
+									{
+										"source": {
+											"path": "$['exchanges']['nyse']"
+										},
+										"sink": {
+											"name": "nyse"
+										}
+									},
+									{
+										"source": {
+											"path": "$['exchanges']['otc']"
+										},
+										"sink": {
+											"name": "otc"
+										}
+									},
+									{
+										"source": {
+											"path": "$['market']"
+										},
+										"sink": {
+											"name": "market"
+										}
+									},
+									{
+										"source": {
+											"path": "$['serverTime']"
+										},
+										"sink": {
+											"name": "serverTime"
+										}
+									}
+								],
+								"collectionReference": "",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_MarketStatus",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "MarketStatus",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy API to Table TickerTypes",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['results']"
+										},
+										"sink": {
+											"name": "results"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id"
+										}
+									}
+								],
+								"collectionReference": "",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_TickerTypes",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "TickerTypes",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T20:37:43Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_Conditions')]",
+				"[concat(variables('factoryId'), '/datasets/Conditions')]",
+				"[concat(variables('factoryId'), '/datasets/R_Exchanges')]",
+				"[concat(variables('factoryId'), '/datasets/Exchanges')]",
+				"[concat(variables('factoryId'), '/datasets/R_MarketHolidays')]",
+				"[concat(variables('factoryId'), '/datasets/MarketHolidays')]",
+				"[concat(variables('factoryId'), '/datasets/R_MarketStatus')]",
+				"[concat(variables('factoryId'), '/datasets/MarketStatus')]",
+				"[concat(variables('factoryId'), '/datasets/R_TickerTypes')]",
+				"[concat(variables('factoryId'), '/datasets/TickerTypes')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dim_copy1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table MarketHolidays",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['date']"
+										},
+										"sink": {
+											"name": "date"
+										}
+									},
+									{
+										"source": {
+											"path": "$['exchange']"
+										},
+										"sink": {
+											"name": "exchange"
+										}
+									},
+									{
+										"source": {
+											"path": "$['name']"
+										},
+										"sink": {
+											"name": "name"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									}
+								],
+								"collectionReference": "",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_MarketHolidays_ls",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "MarketHolidays_ls",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T18:52:11Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_MarketHolidays_ls')]",
+				"[concat(variables('factoryId'), '/datasets/MarketHolidays_ls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dim_copy2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table MarketHolidays",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['date']"
+										},
+										"sink": {
+											"name": "date"
+										}
+									},
+									{
+										"source": {
+											"path": "$['exchange']"
+										},
+										"sink": {
+											"name": "exchange"
+										}
+									},
+									{
+										"source": {
+											"path": "$['name']"
+										},
+										"sink": {
+											"name": "name"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									}
+								],
+								"collectionReference": "",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_MarketHolidays_ls",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "MarketHolidays_ls",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T19:14:06Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_MarketHolidays_ls')]",
+				"[concat(variables('factoryId'), '/datasets/MarketHolidays_ls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_options')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table fact_stocks_grouped_daily_bars",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"additionalHeaders": {
+									"Authorization": {
+										"value": "@pipeline().parameters.Key",
+										"type": "Expression"
+									}
+								},
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['results'][0]['id']"
+										},
+										"sink": {
+											"name": "id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['name']"
+										},
+										"sink": {
+											"name": "publisher_name"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['homepage_url']"
+										},
+										"sink": {
+											"name": "publisher_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['logo_url']"
+										},
+										"sink": {
+											"name": "publisher_logo_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['favicon_url']"
+										},
+										"sink": {
+											"name": "publisher_favicon_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['title']"
+										},
+										"sink": {
+											"name": "title"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['author']"
+										},
+										"sink": {
+											"name": "author"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['published_utc']"
+										},
+										"sink": {
+											"name": "published_utc"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['article_url']"
+										},
+										"sink": {
+											"name": "article_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['tickers'][0]"
+										},
+										"sink": {
+											"name": "tickers"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['image_url']"
+										},
+										"sink": {
+											"name": "image_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['description']"
+										},
+										"sink": {
+											"name": "description"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['keywords'][0]"
+										},
+										"sink": {
+											"name": "keywords"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count"
+										}
+									},
+									{
+										"source": {
+											"path": "$['next_url']"
+										},
+										"sink": {
+											"name": "next_url"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_fact_stocks_grouped_daily_bars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "factstocksgroupeddailybars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Key": {
+						"type": "string",
+						"defaultValue": "Bearer 0ZiwIdFSu_BNdiq3MJ8PKD9Cymj1es4D"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-21T20:56:23Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_grouped_daily_bars')]",
+				"[concat(variables('factoryId'), '/datasets/factstocksgroupeddailybars')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_stocks')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table fact_stocks_grouped_daily_bars",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"additionalHeaders": {
+									"Authorization": {
+										"value": "@pipeline().parameters.Key",
+										"type": "Expression"
+									}
+								},
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['results'][0]['id']"
+										},
+										"sink": {
+											"name": "id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['name']"
+										},
+										"sink": {
+											"name": "publisher_name"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['homepage_url']"
+										},
+										"sink": {
+											"name": "publisher_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['logo_url']"
+										},
+										"sink": {
+											"name": "publisher_logo_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['favicon_url']"
+										},
+										"sink": {
+											"name": "publisher_favicon_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['title']"
+										},
+										"sink": {
+											"name": "title"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['author']"
+										},
+										"sink": {
+											"name": "author"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['published_utc']"
+										},
+										"sink": {
+											"name": "published_utc"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['article_url']"
+										},
+										"sink": {
+											"name": "article_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['tickers'][0]"
+										},
+										"sink": {
+											"name": "tickers"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['image_url']"
+										},
+										"sink": {
+											"name": "image_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['description']"
+										},
+										"sink": {
+											"name": "description"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['keywords'][0]"
+										},
+										"sink": {
+											"name": "keywords"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count"
+										}
+									},
+									{
+										"source": {
+											"path": "$['next_url']"
+										},
+										"sink": {
+											"name": "next_url"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_fact_stocks_grouped_daily_bars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "factstocksgroupeddailybars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Key": {
+						"type": "string",
+						"defaultValue": "Bearer ggy3O7h99L1pGBwmY2ulfmV1Jk9yQ1OD"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-21T20:56:23Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_grouped_daily_bars')]",
+				"[concat(variables('factoryId'), '/datasets/factstocksgroupeddailybars')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_stocks_csv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table fact_stocks_grouped_daily_bars_copy1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['queryCount']"
+										},
+										"sink": {
+											"name": "queryCount",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['resultsCount']"
+										},
+										"sink": {
+											"name": "resultsCount",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['adjusted']"
+										},
+										"sink": {
+											"name": "adjusted",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['T']"
+										},
+										"sink": {
+											"name": "T",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['v']"
+										},
+										"sink": {
+											"name": "v",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['vw']"
+										},
+										"sink": {
+											"name": "vw",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['o']"
+										},
+										"sink": {
+											"name": "o",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['c']"
+										},
+										"sink": {
+											"name": "c",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['h']"
+										},
+										"sink": {
+											"name": "h",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['l']"
+										},
+										"sink": {
+											"name": "l",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['n']"
+										},
+										"sink": {
+											"name": "n",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_fact_stocks_grouped_daily_bars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "fact_stocks_grouped_daily_bars",
+								"type": "DatasetReference",
+								"parameters": {
+									"TargetFileName": {
+										"value": "concat( pipeline().parameters.pTriggerFile, \r\n    formatDateTime(convertTimeZone(utcnow(),'UTC','Eastern Standard Time'),'yyyy-MM-ddTHHmmss')",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"pTriggerFile": {
+						"type": "string",
+						"defaultValue": "grouped_daily_bars"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T19:14:06Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_grouped_daily_bars')]",
+				"[concat(variables('factoryId'), '/datasets/fact_stocks_grouped_daily_bars')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_stocks_parquet')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table fact_stocks_grouped_daily_bars_copy1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['ticker']"
+										},
+										"sink": {
+											"name": "ticker",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['queryCount']"
+										},
+										"sink": {
+											"name": "queryCount",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['resultsCount']"
+										},
+										"sink": {
+											"name": "resultsCount",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['adjusted']"
+										},
+										"sink": {
+											"name": "adjusted",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['v']"
+										},
+										"sink": {
+											"name": "v",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['vw']"
+										},
+										"sink": {
+											"name": "vw",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['o']"
+										},
+										"sink": {
+											"name": "o",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['c']"
+										},
+										"sink": {
+											"name": "c",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['h']"
+										},
+										"sink": {
+											"name": "h",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['l']"
+										},
+										"sink": {
+											"name": "l",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['t']"
+										},
+										"sink": {
+											"name": "t",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['n']"
+										},
+										"sink": {
+											"name": "n",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count",
+											"type": "Int64"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": false
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_fact_stocks_aggregates",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_parq",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T19:14:06Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_aggregates')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/get_api_key_vault')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get API key free",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": true,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://keyssigmabi.vault.azure.net/secrets/Polygon-auth-header-free/53e1073d8e794641855e88a6c656a92a?api-version=7.0",
+							"method": "GET",
+							"headers": {},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://vault.azure.net"
+							}
+						}
+					},
+					{
+						"name": "Copy API to Table fact_stocks_grouped_daily_bars_copy1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Get API key free",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"additionalHeaders": {
+									"Authorization": {
+										"value": "@activity('Get API key free').output.value",
+										"type": "Expression"
+									}
+								},
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['results'][0]['id']"
+										},
+										"sink": {
+											"name": "id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['name']"
+										},
+										"sink": {
+											"name": "publisher_name"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['homepage_url']"
+										},
+										"sink": {
+											"name": "publisher_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['logo_url']"
+										},
+										"sink": {
+											"name": "publisher_logo_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['favicon_url']"
+										},
+										"sink": {
+											"name": "publisher_favicon_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['title']"
+										},
+										"sink": {
+											"name": "title"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['author']"
+										},
+										"sink": {
+											"name": "author"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['published_utc']"
+										},
+										"sink": {
+											"name": "published_utc"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['article_url']"
+										},
+										"sink": {
+											"name": "article_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['tickers'][0]"
+										},
+										"sink": {
+											"name": "tickers"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['image_url']"
+										},
+										"sink": {
+											"name": "image_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['description']"
+										},
+										"sink": {
+											"name": "description"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['keywords'][0]"
+										},
+										"sink": {
+											"name": "keywords"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count"
+										}
+									},
+									{
+										"source": {
+											"path": "$['next_url']"
+										},
+										"sink": {
+											"name": "next_url"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_fact_stocks_grouped_daily_bars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "factstocksgroupeddailybars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "TEST"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T20:37:42Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_grouped_daily_bars')]",
+				"[concat(variables('factoryId'), '/datasets/factstocksgroupeddailybars')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lookup_urls')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup_urls",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT DISTINCT url_ex_api_key \nFROM urls_polygon \nWHERE url_ex_api_key IS NOT NULL",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sqldb",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "staging"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T23:33:38Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sqldb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Conditions')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ats_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "dim"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "Conditions"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Exchanges')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ats_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "dim"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "Exchanges"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MarketHolidays')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ats_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "dim"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "MarketHolidays"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MarketHolidays_ls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ats_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "dim"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "MarketHolidaysls"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MarketHolidays_ls_adls2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "dim"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "stocks"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MarketStatus')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ats_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "dim"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "MarketStatus"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_Conditions')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_options_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v3/reference/conditions?asset_class=stocks&apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_options_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_Exchanges')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_options_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v3/reference/exchanges?asset_class=options&apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_options_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_MarketHolidays')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v1/marketstatus/upcoming?apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_MarketHolidays_ls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v1/marketstatus/upcoming?apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_MarketStatus')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v1/marketstatus/now?apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_TickerNews')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "https://api.polygon.io/v2/reference/news?order=desc&sort=published_utc&apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_TickerTypes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "https://api.polygon.io/v3/reference/tickers/types?locale=global&apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_aggregates')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v2/aggs/ticker/AAPL/range/1/day/2023-01-09/2023-01-09?adjusted=true&sort=asc&limit=120"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_grouped_daily_bars')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TickerNews')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ats_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "dim"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "TickerNews"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TickerTypes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ats_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "dim"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "TickerTypes"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adls2_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"fileName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "output"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "223",
+						"fileSystem": "stocks"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "output"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_ats_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ats_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "output"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "Conditions"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_rest_forex_free')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_forex_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest/free"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_forex_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_rest_options_free')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_options_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest/free"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_options_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_rest_stocks_free')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks_free_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest/free"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks_free_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sqldb')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sqldb_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/sql"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sqldb_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_stocks_grouped_daily_bars')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TargetFileName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "fact"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().TargetFileName",
+							"type": "Expression"
+						},
+						"fileSystem": "stocks"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/factstocksgroupeddailybars')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ats_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "fact"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "factstocksgroupeddailybars"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Polygon_LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('Polygon_LS_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous",
+					"authHeaders": {
+						"Authorization": {
+							"type": "AzureKeyVaultSecret",
+							"store": {
+								"referenceName": "Polygon_keyvault_LS",
+								"type": "LinkedServiceReference"
+							},
+							"secretName": "Polygon-auth-header-free"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Polygon_keyvault_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Polygon_keyvault_LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('Polygon_keyvault_LS_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_adls2_ak_01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_adls2_ak_01_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_adls2_ak_01_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_ats_ak_01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureTableStorage",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "Polygon_keyvault_LS",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('ls_ats_ak_01_properties_typeProperties_connectionString_secretName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Polygon_keyvault_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_polygon_forex_free_01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('ls_polygon_forex_free_01_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous",
+					"authHeaders": {
+						"Authorization": {
+							"type": "AzureKeyVaultSecret",
+							"store": {
+								"referenceName": "Polygon_keyvault_LS",
+								"type": "LinkedServiceReference"
+							},
+							"secretName": "Polygon-auth-header-forex-free"
+						}
+					}
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime-interactive",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-interactive')]",
+				"[concat(variables('factoryId'), '/linkedServices/Polygon_keyvault_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_polygon_options_free_01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('ls_polygon_options_free_01_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous",
+					"authHeaders": {
+						"Authorization": {
+							"type": "AzureKeyVaultSecret",
+							"store": {
+								"referenceName": "Polygon_keyvault_LS",
+								"type": "LinkedServiceReference"
+							},
+							"secretName": "Polygon-auth-header-options-free"
+						}
+					}
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime-interactive",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-interactive')]",
+				"[concat(variables('factoryId'), '/linkedServices/Polygon_keyvault_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_polygon_stocks_free_01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('ls_polygon_stocks_free_01_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous",
+					"authHeaders": {
+						"Authorization": {
+							"type": "AzureKeyVaultSecret",
+							"store": {
+								"referenceName": "Polygon_keyvault_LS",
+								"type": "LinkedServiceReference"
+							},
+							"secretName": "Polygon-auth-header-stocks-free"
+						}
+					}
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime-interactive",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-interactive')]",
+				"[concat(variables('factoryId'), '/linkedServices/Polygon_keyvault_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sqldb_ak_01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_sqldb_ak_01_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime-interactive",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-interactive')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime-interactive')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 10,
+							"cleanup": false
+						},
+						"pipelineExternalComputeScaleProperties": {
+							"timeToLive": 60
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+			"apiVersion": "2018-06-01",
+			"properties": {},
+			"dependsOn": []
+		}
+	]
+}

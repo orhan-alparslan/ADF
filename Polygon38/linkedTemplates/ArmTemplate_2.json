@@ -1,0 +1,928 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "Polygon38"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_stocks')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table fact_stocks_grouped_daily_bars",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"additionalHeaders": {
+									"Authorization": {
+										"value": "@pipeline().parameters.Key",
+										"type": "Expression"
+									}
+								},
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['results'][0]['id']"
+										},
+										"sink": {
+											"name": "id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['name']"
+										},
+										"sink": {
+											"name": "publisher_name"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['homepage_url']"
+										},
+										"sink": {
+											"name": "publisher_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['logo_url']"
+										},
+										"sink": {
+											"name": "publisher_logo_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['favicon_url']"
+										},
+										"sink": {
+											"name": "publisher_favicon_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['title']"
+										},
+										"sink": {
+											"name": "title"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['author']"
+										},
+										"sink": {
+											"name": "author"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['published_utc']"
+										},
+										"sink": {
+											"name": "published_utc"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['article_url']"
+										},
+										"sink": {
+											"name": "article_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['tickers'][0]"
+										},
+										"sink": {
+											"name": "tickers"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['image_url']"
+										},
+										"sink": {
+											"name": "image_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['description']"
+										},
+										"sink": {
+											"name": "description"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['keywords'][0]"
+										},
+										"sink": {
+											"name": "keywords"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count"
+										}
+									},
+									{
+										"source": {
+											"path": "$['next_url']"
+										},
+										"sink": {
+											"name": "next_url"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_fact_stocks_grouped_daily_bars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "factstocksgroupeddailybars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Key": {
+						"type": "string",
+						"defaultValue": "Bearer ggy3O7h99L1pGBwmY2ulfmV1Jk9yQ1OD"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-21T20:56:23Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_stocks_csv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table fact_stocks_grouped_daily_bars_copy1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['queryCount']"
+										},
+										"sink": {
+											"name": "queryCount",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['resultsCount']"
+										},
+										"sink": {
+											"name": "resultsCount",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['adjusted']"
+										},
+										"sink": {
+											"name": "adjusted",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['T']"
+										},
+										"sink": {
+											"name": "T",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['v']"
+										},
+										"sink": {
+											"name": "v",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['vw']"
+										},
+										"sink": {
+											"name": "vw",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['o']"
+										},
+										"sink": {
+											"name": "o",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['c']"
+										},
+										"sink": {
+											"name": "c",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['h']"
+										},
+										"sink": {
+											"name": "h",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['l']"
+										},
+										"sink": {
+											"name": "l",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['n']"
+										},
+										"sink": {
+											"name": "n",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_fact_stocks_grouped_daily_bars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "fact_stocks_grouped_daily_bars",
+								"type": "DatasetReference",
+								"parameters": {
+									"TargetFileName": {
+										"value": "concat( pipeline().parameters.pTriggerFile, \r\n    formatDateTime(convertTimeZone(utcnow(),'UTC','Eastern Standard Time'),'yyyy-MM-ddTHHmmss')",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"pTriggerFile": {
+						"type": "string",
+						"defaultValue": "grouped_daily_bars"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T19:14:06Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fact_stocks_parquet')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy API to Table fact_stocks_grouped_daily_bars_copy1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['ticker']"
+										},
+										"sink": {
+											"name": "ticker",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['queryCount']"
+										},
+										"sink": {
+											"name": "queryCount",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['resultsCount']"
+										},
+										"sink": {
+											"name": "resultsCount",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['adjusted']"
+										},
+										"sink": {
+											"name": "adjusted",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['v']"
+										},
+										"sink": {
+											"name": "v",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['vw']"
+										},
+										"sink": {
+											"name": "vw",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['o']"
+										},
+										"sink": {
+											"name": "o",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['c']"
+										},
+										"sink": {
+											"name": "c",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['h']"
+										},
+										"sink": {
+											"name": "h",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['l']"
+										},
+										"sink": {
+											"name": "l",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['t']"
+										},
+										"sink": {
+											"name": "t",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['n']"
+										},
+										"sink": {
+											"name": "n",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count",
+											"type": "Int64"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": false
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_fact_stocks_aggregates",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_parq",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T19:14:06Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/get_api_key_vault')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get API key free",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": true,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://keyssigmabi.vault.azure.net/secrets/Polygon-auth-header-free/53e1073d8e794641855e88a6c656a92a?api-version=7.0",
+							"method": "GET",
+							"headers": {},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://vault.azure.net"
+							}
+						}
+					},
+					{
+						"name": "Copy API to Table fact_stocks_grouped_daily_bars_copy1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Get API key free",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"additionalHeaders": {
+									"Authorization": {
+										"value": "@activity('Get API key free').output.value",
+										"type": "Expression"
+									}
+								},
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['results'][0]['id']"
+										},
+										"sink": {
+											"name": "id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['name']"
+										},
+										"sink": {
+											"name": "publisher_name"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['homepage_url']"
+										},
+										"sink": {
+											"name": "publisher_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['logo_url']"
+										},
+										"sink": {
+											"name": "publisher_logo_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['publisher']['favicon_url']"
+										},
+										"sink": {
+											"name": "publisher_favicon_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['title']"
+										},
+										"sink": {
+											"name": "title"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['author']"
+										},
+										"sink": {
+											"name": "author"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['published_utc']"
+										},
+										"sink": {
+											"name": "published_utc"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['article_url']"
+										},
+										"sink": {
+											"name": "article_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['tickers'][0]"
+										},
+										"sink": {
+											"name": "tickers"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['image_url']"
+										},
+										"sink": {
+											"name": "image_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['description']"
+										},
+										"sink": {
+											"name": "description"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['keywords'][0]"
+										},
+										"sink": {
+											"name": "keywords"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count"
+										}
+									},
+									{
+										"source": {
+											"path": "$['next_url']"
+										},
+										"sink": {
+											"name": "next_url"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_fact_stocks_grouped_daily_bars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "factstocksgroupeddailybars",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "TEST"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T20:37:42Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lookup_urls')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup_urls",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT DISTINCT url_ex_api_key \nFROM urls_polygon \nWHERE url_ex_api_key IS NOT NULL",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sqldb",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "staging"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-23T23:33:38Z"
+			},
+			"dependsOn": []
+		}
+	]
+}
