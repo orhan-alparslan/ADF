@@ -25,11 +25,10 @@
 					"value": "@dataset().ds_fileName",
 					"type": "Expression"
 				},
-				"folderPath": {
+				"fileSystem": {
 					"value": "@dataset().ds_folderName",
 					"type": "Expression"
-				},
-				"fileSystem": "stocks"
+				}
 			},
 			"compressionCodec": "snappy"
 		},
