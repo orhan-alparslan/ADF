@@ -139,7 +139,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq')]",
+			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq_stocks')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -154,7 +154,8 @@
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobFSLocation"
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "stocks"
 					},
 					"compressionCodec": "snappy"
 				},

@@ -621,7 +621,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq",
+								"referenceName": "ds_adls2_parq_stocks",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
