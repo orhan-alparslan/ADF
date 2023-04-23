@@ -184,7 +184,7 @@
 				]
 			},
 			{
-				"name": "fact_stocks_grouped_daily_bars_copy1",
+				"name": "fact_stocks_aggregates_bars",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
