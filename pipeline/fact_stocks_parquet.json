@@ -24,13 +24,7 @@
 					"sink": {
 						"type": "ParquetSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings",
-							"metadata": [
-								{
-									"name": "Copy_name",
-									"value": "fact_stocks_grouped_daily_bars"
-								}
-							]
+							"type": "AzureBlobFSWriteSettings"
 						},
 						"formatSettings": {
 							"type": "ParquetWriteSettings"
@@ -189,7 +183,11 @@
 				"outputs": [
 					{
 						"referenceName": "ds_adls2_parq_stocks",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"ds_folderName": "stocks",
+							"ds_fileName": "fact_stocks_grouped_daily_bars"
+						}
 					}
 				]
 			}

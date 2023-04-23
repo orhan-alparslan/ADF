@@ -5,6 +5,14 @@
 			"referenceName": "ls_adls2_ak_01",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"ds_folderName": {
+				"type": "string"
+			},
+			"ds_fileName": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "output"
 		},
@@ -13,6 +21,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().ds_folderName",
+					"type": "Expression"
+				},
 				"fileSystem": "stocks"
 			},
 			"compressionCodec": "snappy"
