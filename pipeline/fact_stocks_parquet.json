@@ -185,7 +185,10 @@
 						"referenceName": "ds_adls2_parq_stocks",
 						"type": "DatasetReference",
 						"parameters": {
-							"ds_fileSystemName": "newfact",
+							"ds_fileSystemName": {
+								"value": "@pipeline().parameters.pipe_fileSystemName",
+								"type": "Expression"
+							},
 							"ds_fileName": "fact_stocks_grouped_daily_bars",
 							"ds_directoryName": "fact"
 						}
@@ -193,6 +196,11 @@
 				]
 			}
 		],
+		"parameters": {
+			"pipe_fileSystemName": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2023-03-23T19:14:06Z"
 	},
