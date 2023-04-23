@@ -1,5 +1,5 @@
 {
-	"name": "ds_adls2_parq",
+	"name": "ds_adls2_parq_stocks",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls2_ak_01",
@@ -12,7 +12,8 @@
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation"
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "stocks"
 			},
 			"compressionCodec": "snappy"
 		},
