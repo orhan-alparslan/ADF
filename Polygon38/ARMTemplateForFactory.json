@@ -41,7 +41,7 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/dim_copy2')]",
+			"name": "[concat(parameters('factoryName'), '/dim_copy')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -170,33 +170,6 @@
 											"name": "url",
 											"type": "String"
 										}
-									},
-									{
-										"source": {
-											"path": "$['status']"
-										},
-										"sink": {
-											"name": "status",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['request_id']"
-										},
-										"sink": {
-											"name": "request_id",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['count']"
-										},
-										"sink": {
-											"name": "count",
-											"type": "Int16"
-										}
 									}
 								],
 								"collectionReference": "",
@@ -221,6 +194,381 @@
 								}
 							}
 						]
+					},
+					{
+						"name": "TickerTypes API to Parquet Dynamic",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['results'][0]['code']"
+										},
+										"sink": {
+											"name": "code",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['description']"
+										},
+										"sink": {
+											"name": "description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['asset_class']"
+										},
+										"sink": {
+											"name": "asset_class",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['locale']"
+										},
+										"sink": {
+											"name": "locale",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "",
+								"mapComplexValuesToString": false
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_TickerTypes",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_parq_stocks",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_blobName": "stocks",
+									"ds_fileName": "dim_ticker_types",
+									"ds_directoryName": "dim"
+								}
+							}
+						]
+					},
+					{
+						"name": "Market_Holidays API to Parquet Dynamic_copy2",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['close']"
+										},
+										"sink": {
+											"name": "close",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"path": "$['date']"
+										},
+										"sink": {
+											"name": "date",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"path": "$['exchange']"
+										},
+										"sink": {
+											"name": "exchange",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['name']"
+										},
+										"sink": {
+											"name": "name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['open']"
+										},
+										"sink": {
+											"name": "open",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_MarketHolidays",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_parq_stocks",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_blobName": "stocks",
+									"ds_fileName": "dim_market_holidays_upcoming",
+									"ds_directoryName": "dim"
+								}
+							}
+						]
+					},
+					{
+						"name": "Tickers API to Parquet Dynamic_copy3",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['results'][0]['ticker']"
+										},
+										"sink": {
+											"name": "ticker",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['name']"
+										},
+										"sink": {
+											"name": "name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['market']"
+										},
+										"sink": {
+											"name": "market",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['locale']"
+										},
+										"sink": {
+											"name": "locale",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['primary_exchange']"
+										},
+										"sink": {
+											"name": "primary_exchange",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['type']"
+										},
+										"sink": {
+											"name": "type",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['active']"
+										},
+										"sink": {
+											"name": "active",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['currency_name']"
+										},
+										"sink": {
+											"name": "currency_name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['cik']"
+										},
+										"sink": {
+											"name": "cik",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['composite_figi']"
+										},
+										"sink": {
+											"name": "composite_figi",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['share_class_figi']"
+										},
+										"sink": {
+											"name": "share_class_figi",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['results'][0]['last_updated_utc']"
+										},
+										"sink": {
+											"name": "last_updated_utc",
+											"type": "DateTime"
+										}
+									}
+								],
+								"collectionReference": "",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_Tickers",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_parq_stocks",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_blobName": "stocks",
+									"ds_fileName": "dim_tickers",
+									"ds_directoryName": "dim"
+								}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -232,7 +580,10 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/R_Exchanges')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]",
+				"[concat(variables('factoryId'), '/datasets/R_TickerTypes')]",
+				"[concat(variables('factoryId'), '/datasets/R_MarketHolidays')]",
+				"[concat(variables('factoryId'), '/datasets/R_Tickers')]"
 			]
 		},
 		{
@@ -1533,7 +1884,7 @@
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
-					"relativeUrl": "https://api.polygon.io/v3/reference/tickers/types?locale=global&apiKey="
+					"relativeUrl": "v3/reference/tickers/types"
 				},
 				"schema": []
 			},
@@ -1588,41 +1939,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_adls2_csv')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls2_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"fileName": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "output"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "223",
-						"fileSystem": "stocks"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq_stocks')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1669,29 +1985,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_ats_csv')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ats_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "output"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "Conditions"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
 			]
 		},
 		{
@@ -1882,6 +2175,29 @@
 			"apiVersion": "2018-06-01",
 			"properties": {},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_Tickers')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v3/reference/tickers?sort=ticker"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
 		}
 	]
 }
