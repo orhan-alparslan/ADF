@@ -1,0 +1,26 @@
+{
+	"name": "ls_polygon_stocks",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://api.polygon.io/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous",
+			"authHeaders": {
+				"Authorization": {
+					"type": "AzureKeyVaultSecret",
+					"store": {
+						"referenceName": "Polygon_keyvault_LS",
+						"type": "LinkedServiceReference"
+					},
+					"secretName": "Polygon-auth-header-stocks"
+				}
+			}
+		},
+		"connectVia": {
+			"referenceName": "integrationRuntime-interactive",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
