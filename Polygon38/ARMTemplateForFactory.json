@@ -945,47 +945,11 @@
 								"mappings": [
 									{
 										"source": {
-											"path": "$['ticker']"
-										},
-										"sink": {
-											"name": "ticker",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['queryCount']"
-										},
-										"sink": {
-											"name": "queryCount",
-											"type": "Int16"
-										}
-									},
-									{
-										"source": {
-											"path": "$['resultsCount']"
-										},
-										"sink": {
-											"name": "resultsCount",
-											"type": "Int16"
-										}
-									},
-									{
-										"source": {
-											"path": "$['adjusted']"
-										},
-										"sink": {
-											"name": "adjusted",
-											"type": "Boolean"
-										}
-									},
-									{
-										"source": {
 											"path": "[['v']"
 										},
 										"sink": {
 											"name": "v",
-											"type": "Int16"
+											"type": "Int32"
 										}
 									},
 									{
@@ -1048,7 +1012,43 @@
 										},
 										"sink": {
 											"name": "n",
-											"type": "Int16"
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ticker']"
+										},
+										"sink": {
+											"name": "ticker",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['queryCount']"
+										},
+										"sink": {
+											"name": "queryCount",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['resultsCount']"
+										},
+										"sink": {
+											"name": "resultsCount",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['adjusted']"
+										},
+										"sink": {
+											"name": "adjusted",
+											"type": "Boolean"
 										}
 									},
 									{
@@ -1075,7 +1075,7 @@
 										},
 										"sink": {
 											"name": "count",
-											"type": "Int16"
+											"type": "Int32"
 										}
 									}
 								],
