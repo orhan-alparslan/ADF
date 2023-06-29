@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adls2_ak_01'"
 		},
+		"ls_sqldb_ak_01_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sqldb_ak_01'"
+		},
 		"Polygon_keyvault_LS_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://keyssigmabi.vault.azure.net/"
@@ -27,7 +31,7 @@
 			"type": "string",
 			"defaultValue": "blobstorage-polygon38-connection-string"
 		},
-		"ls_polygon_forex_free_01_properties_typeProperties_url": {
+		"ls_polygon_stocks_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://api.polygon.io/"
 		}
@@ -74,36 +78,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/MarketHolidays_ls_adls2')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls2_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "dim"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "stocks"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ds_adls2_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -148,7 +122,7 @@
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"ds_fileSystemName": {
+					"ds_blobName": {
 						"type": "string"
 					},
 					"ds_fileName": {
@@ -175,50 +149,11 @@
 							"type": "Expression"
 						},
 						"fileSystem": {
-							"value": "@dataset().ds_fileSystemName",
+							"value": "@dataset().ds_blobName",
 							"type": "Expression"
 						}
 					},
 					"compressionCodec": "snappy"
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/fact_stocks_grouped_daily_bars')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls2_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"TargetFileName": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "fact"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": {
-							"value": "@dataset().TargetFileName",
-							"type": "Expression"
-						},
-						"fileSystem": "stocks"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
 				},
 				"schema": []
 			},
@@ -305,167 +240,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Conditions')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ats_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "dim"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "Conditions"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Exchanges')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ats_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "dim"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "Exchanges"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/MarketHolidays')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ats_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "dim"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "MarketHolidays"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/MarketHolidays_ls')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ats_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "dim"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "MarketHolidaysls"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/MarketStatus')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ats_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "dim"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "MarketStatus"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TickerNews')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ats_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "dim"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "TickerNews"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TickerTypes')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ats_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "dim"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "TickerTypes"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ds_ats_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -489,37 +263,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/factstocksgroupeddailybars')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ats_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "fact"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "factstocksgroupeddailybars"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ats_ak_01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_polygon_forex_free_01')]",
+			"name": "[concat(parameters('factoryName'), '/ls_polygon_stocks')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"type": "RestService",
 				"typeProperties": {
-					"url": "[parameters('ls_polygon_forex_free_01_properties_typeProperties_url')]",
+					"url": "[parameters('ls_polygon_stocks_properties_typeProperties_url')]",
 					"enableServerCertificateValidation": true,
 					"authenticationType": "Anonymous",
 					"authHeaders": {
@@ -529,7 +280,7 @@
 								"referenceName": "Polygon_keyvault_LS",
 								"type": "LinkedServiceReference"
 							},
-							"secretName": "Polygon-auth-header-forex-free"
+							"secretName": "Polygon-auth-header-stocks"
 						}
 					}
 				},
@@ -541,6 +292,232 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-interactive')]",
 				"[concat(variables('factoryId'), '/linkedServices/Polygon_keyvault_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sqldb_ak_01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_sqldb_ak_01_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime-interactive",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-interactive')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_Conditions')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v3/reference/conditions?asset_class=stocks&apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_Exchanges')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v3/reference/exchanges"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_MarketHolidays')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v1/marketstatus/upcoming?apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_MarketHolidays_ls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v1/marketstatus/upcoming?apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_MarketStatus')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v1/marketstatus/now?apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_TickerNews')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "https://api.polygon.io/v2/reference/news?order=desc&sort=published_utc&apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_TickerTypes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "https://api.polygon.io/v3/reference/tickers/types?locale=global&apiKey="
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_aggregates')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v2/aggs/ticker/AAPL/range/1/day/2023-01-09/2023-01-09?adjusted=true&sort=asc&limit=120"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_grouped_daily_bars')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
 			]
 		}
 	]

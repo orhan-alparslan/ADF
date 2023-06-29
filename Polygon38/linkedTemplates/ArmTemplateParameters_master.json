@@ -23,13 +23,7 @@
 		"ls_ats_ak_01_properties_typeProperties_connectionString_secretName": {
 			"value": "blobstorage-polygon38-connection-string"
 		},
-		"ls_polygon_forex_free_01_properties_typeProperties_url": {
-			"value": "https://api.polygon.io/"
-		},
-		"ls_polygon_options_free_01_properties_typeProperties_url": {
-			"value": "https://api.polygon.io/"
-		},
-		"ls_polygon_stocks_free_01_properties_typeProperties_url": {
+		"ls_polygon_stocks_properties_typeProperties_url": {
 			"value": "https://api.polygon.io/"
 		},
 		"containerUri": {
