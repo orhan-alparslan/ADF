@@ -216,7 +216,7 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['results'][0]['code']"
+									"path": "['code']"
 								},
 								"sink": {
 									"name": "code",
@@ -225,7 +225,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['description']"
+									"path": "['description']"
 								},
 								"sink": {
 									"name": "description",
@@ -234,7 +234,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['asset_class']"
+									"path": "['asset_class']"
 								},
 								"sink": {
 									"name": "asset_class",
@@ -243,7 +243,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['locale']"
+									"path": "['locale']"
 								},
 								"sink": {
 									"name": "locale",
@@ -303,6 +303,8 @@
 			{
 				"name": "Market_Holidays API to Parquet Dynamic_copy2",
 				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -446,7 +448,7 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['results'][0]['ticker']"
+									"path": "['ticker']"
 								},
 								"sink": {
 									"name": "ticker",
@@ -455,7 +457,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['name']"
+									"path": "['name']"
 								},
 								"sink": {
 									"name": "name",
@@ -464,7 +466,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['market']"
+									"path": "['market']"
 								},
 								"sink": {
 									"name": "market",
@@ -473,7 +475,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['locale']"
+									"path": "['locale']"
 								},
 								"sink": {
 									"name": "locale",
@@ -482,7 +484,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['primary_exchange']"
+									"path": "['primary_exchange']"
 								},
 								"sink": {
 									"name": "primary_exchange",
@@ -491,7 +493,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['type']"
+									"path": "['type']"
 								},
 								"sink": {
 									"name": "type",
@@ -500,7 +502,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['active']"
+									"path": "['active']"
 								},
 								"sink": {
 									"name": "active",
@@ -509,7 +511,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['currency_name']"
+									"path": "['currency_name']"
 								},
 								"sink": {
 									"name": "currency_name",
@@ -518,7 +520,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['cik']"
+									"path": "['cik']"
 								},
 								"sink": {
 									"name": "cik",
@@ -527,7 +529,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['composite_figi']"
+									"path": "['composite_figi']"
 								},
 								"sink": {
 									"name": "composite_figi",
@@ -536,7 +538,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['share_class_figi']"
+									"path": "['share_class_figi']"
 								},
 								"sink": {
 									"name": "share_class_figi",
@@ -545,7 +547,7 @@
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['last_updated_utc']"
+									"path": "['last_updated_utc']"
 								},
 								"sink": {
 									"name": "last_updated_utc",
