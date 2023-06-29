@@ -11,7 +11,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "v3/reference/exchanges?apiKey="
+			"relativeUrl": "v3/reference/exchanges"
 		},
 		"schema": []
 	},
