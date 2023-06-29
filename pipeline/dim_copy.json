@@ -5,6 +5,8 @@
 			{
 				"name": "Exchanges API to Parquet Dynamic",
 				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -19,7 +21,10 @@
 						"type": "RestSource",
 						"httpRequestTimeout": "00:01:40",
 						"requestInterval": "00.00:00:00.010",
-						"requestMethod": "GET"
+						"requestMethod": "GET",
+						"paginationRules": {
+							"supportRFC5988": "true"
+						}
 					},
 					"sink": {
 						"type": "ParquetSink",
@@ -177,8 +182,6 @@
 			{
 				"name": "TickerTypes API to Parquet Dynamic",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -246,10 +249,37 @@
 									"name": "locale",
 									"type": "String"
 								}
+							},
+							{
+								"source": {
+									"path": "$['count']"
+								},
+								"sink": {
+									"name": "count",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['status']"
+								},
+								"sink": {
+									"name": "status",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['request_id']"
+								},
+								"sink": {
+									"name": "request_id",
+									"type": "String"
+								}
 							}
 						],
-						"collectionReference": "",
-						"mapComplexValuesToString": false
+						"collectionReference": "$['results']",
+						"mapComplexValuesToString": true
 					}
 				},
 				"inputs": [
@@ -273,8 +303,6 @@
 			{
 				"name": "Market_Holidays API to Parquet Dynamic_copy2",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -387,8 +415,6 @@
 			{
 				"name": "Tickers API to Parquet Dynamic_copy3",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -499,7 +525,7 @@
 								},
 								"sink": {
 									"name": "cik",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
@@ -525,12 +551,47 @@
 									"path": "$['results'][0]['last_updated_utc']"
 								},
 								"sink": {
-									"name": "last_updated_utc",
-									"type": "DateTime"
+									"name": "last_updated_utc"
+								}
+							},
+							{
+								"source": {
+									"path": "$['status']"
+								},
+								"sink": {
+									"name": "status",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['request_id']"
+								},
+								"sink": {
+									"name": "request_id",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['count']"
+								},
+								"sink": {
+									"name": "count",
+									"type": "Int16"
+								}
+							},
+							{
+								"source": {
+									"path": "$['next_url']"
+								},
+								"sink": {
+									"name": "next_url",
+									"type": "String"
 								}
 							}
 						],
-						"collectionReference": "",
+						"collectionReference": "$['results']",
 						"mapComplexValuesToString": true
 					}
 				},
