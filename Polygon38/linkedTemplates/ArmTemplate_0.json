@@ -431,7 +431,7 @@
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
-					"relativeUrl": "v3/reference/tickers?sort=ticker"
+					"relativeUrl": "v3/reference/tickers?limit=1000&sort=ticker"
 				},
 				"schema": []
 			},
