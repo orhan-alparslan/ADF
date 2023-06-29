@@ -196,12 +196,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"Key": {
-				"type": "string",
-				"defaultValue": "Bearer ggy3O7h99L1pGBwmY2ulfmV1Jk9yQ1OD"
-			}
-		},
 		"annotations": [],
 		"lastPublishTime": "2023-03-21T20:56:23Z"
 	},
