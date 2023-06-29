@@ -52,16 +52,16 @@
 								"mappings": [
 									{
 										"source": {
-											"path": "$['results'][0]['id']"
+											"path": "[['id']"
 										},
 										"sink": {
 											"name": "id",
-											"type": "String"
+											"type": "Int16"
 										}
 									},
 									{
 										"source": {
-											"path": "$['results'][0]['type']"
+											"path": "[['type']"
 										},
 										"sink": {
 											"name": "type",
@@ -70,7 +70,7 @@
 									},
 									{
 										"source": {
-											"path": "$['results'][0]['asset_class']"
+											"path": "[['asset_class']"
 										},
 										"sink": {
 											"name": "asset_class",
@@ -79,7 +79,7 @@
 									},
 									{
 										"source": {
-											"path": "$['results'][0]['locale']"
+											"path": "[['locale']"
 										},
 										"sink": {
 											"name": "locale",
@@ -88,7 +88,7 @@
 									},
 									{
 										"source": {
-											"path": "$['results'][0]['name']"
+											"path": "[['name']"
 										},
 										"sink": {
 											"name": "name",
@@ -97,7 +97,7 @@
 									},
 									{
 										"source": {
-											"path": "$['results'][0]['acronym']"
+											"path": "[['acronym']"
 										},
 										"sink": {
 											"name": "acronym",
@@ -106,7 +106,7 @@
 									},
 									{
 										"source": {
-											"path": "$['results'][0]['mic']"
+											"path": "[['mic']"
 										},
 										"sink": {
 											"name": "mic",
@@ -115,7 +115,7 @@
 									},
 									{
 										"source": {
-											"path": "$['results'][0]['operating_mic']"
+											"path": "[['operating_mic']"
 										},
 										"sink": {
 											"name": "operating_mic",
@@ -124,7 +124,7 @@
 									},
 									{
 										"source": {
-											"path": "$['results'][0]['participant_id']"
+											"path": "[['participant_id']"
 										},
 										"sink": {
 											"name": "participant_id",
@@ -133,15 +133,42 @@
 									},
 									{
 										"source": {
-											"path": "$['results'][0]['url']"
+											"path": "[['url']"
 										},
 										"sink": {
 											"name": "url",
 											"type": "String"
 										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count",
+											"type": "Int16"
+										}
 									}
 								],
-								"collectionReference": "",
+								"collectionReference": "$['results']",
 								"mapComplexValuesToString": true
 							}
 						},
