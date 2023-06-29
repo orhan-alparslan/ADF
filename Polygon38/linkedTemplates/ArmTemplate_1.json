@@ -199,6 +199,8 @@
 					{
 						"name": "TickerTypes API to Parquet Dynamic",
 						"type": "Copy",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -450,7 +452,10 @@
 								"type": "RestSource",
 								"httpRequestTimeout": "00:01:40",
 								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET"
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
 							},
 							"sink": {
 								"type": "ParquetSink",
