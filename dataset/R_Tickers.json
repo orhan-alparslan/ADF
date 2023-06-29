@@ -11,7 +11,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "https://api.polygon.io/v3/reference/tickers?limit=1000&sort=ticker"
+			"relativeUrl": "v3/reference/tickers?limit=1000&sort=ticker"
 		},
 		"schema": []
 	}
