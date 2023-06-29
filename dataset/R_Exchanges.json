@@ -2,7 +2,7 @@
 	"name": "R_Exchanges",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_polygon_options_free_01",
+			"referenceName": "ls_polygon_stocks",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
@@ -11,7 +11,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "v3/reference/exchanges?asset_class=options&apiKey="
+			"relativeUrl": "v3/reference/exchanges"
 		},
 		"schema": []
 	},

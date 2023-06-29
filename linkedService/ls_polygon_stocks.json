@@ -1,6 +1,5 @@
 {
-	"name": "ls_polygon_options_free_01",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"name": "ls_polygon_stocks",
 	"properties": {
 		"annotations": [],
 		"type": "RestService",
@@ -15,7 +14,7 @@
 						"referenceName": "Polygon_keyvault_LS",
 						"type": "LinkedServiceReference"
 					},
-					"secretName": "Polygon-auth-header-options-free"
+					"secretName": "Polygon-auth-header-stocks"
 				}
 			}
 		},

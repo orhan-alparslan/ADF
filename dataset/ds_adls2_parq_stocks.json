@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"ds_fileSystemName": {
+			"ds_blobName": {
 				"type": "string"
 			},
 			"ds_fileName": {
@@ -33,7 +33,7 @@
 					"type": "Expression"
 				},
 				"fileSystem": {
-					"value": "@dataset().ds_fileSystemName",
+					"value": "@dataset().ds_blobName",
 					"type": "Expression"
 				}
 			},

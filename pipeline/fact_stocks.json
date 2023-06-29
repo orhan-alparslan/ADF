@@ -31,9 +31,13 @@
 						}
 					},
 					"sink": {
-						"type": "AzureTableSink",
-						"azureTableInsertType": "merge",
-						"writeBatchSize": 10000
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
 					},
 					"enableStaging": false,
 					"translator": {
@@ -188,8 +192,13 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "factstocksgroupeddailybars",
-						"type": "DatasetReference"
+						"referenceName": "ds_adls2_parq_stocks",
+						"type": "DatasetReference",
+						"parameters": {
+							"ds_blobName": "stocks",
+							"ds_fileName": "fact_stocks_grouped_daily_bars",
+							"ds_directoryName": "fact"
+						}
 					}
 				]
 			}
