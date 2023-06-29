@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy API to Table MarketHolidays",
+				"name": "Exchanges API to Parquet Dynamic",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -19,12 +19,19 @@
 						"type": "RestSource",
 						"httpRequestTimeout": "00:01:40",
 						"requestInterval": "00.00:00:00.010",
-						"requestMethod": "GET"
+						"requestMethod": "GET",
+						"paginationRules": {
+							"supportRFC5988": "true"
+						}
 					},
 					"sink": {
-						"type": "AzureTableSink",
-						"azureTableInsertType": "merge",
-						"writeBatchSize": 10000
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
 					},
 					"enableStaging": false,
 					"translator": {
@@ -32,26 +39,92 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['date']"
+									"path": "$['results'][0]['id']"
 								},
 								"sink": {
-									"name": "date"
+									"name": "id",
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"path": "$['exchange']"
+									"path": "$['results'][0]['type']"
 								},
 								"sink": {
-									"name": "exchange"
+									"name": "type",
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"path": "$['name']"
+									"path": "$['results'][0]['asset_class']"
 								},
 								"sink": {
-									"name": "name"
+									"name": "asset_class",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['locale']"
+								},
+								"sink": {
+									"name": "locale",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['name']"
+								},
+								"sink": {
+									"name": "name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['acronym']"
+								},
+								"sink": {
+									"name": "acronym",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['mic']"
+								},
+								"sink": {
+									"name": "mic",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['operating_mic']"
+								},
+								"sink": {
+									"name": "operating_mic",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['participant_id']"
+								},
+								"sink": {
+									"name": "participant_id",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['results'][0]['url']"
+								},
+								"sink": {
+									"name": "url",
+									"type": "String"
 								}
 							},
 							{
@@ -59,7 +132,26 @@
 									"path": "$['status']"
 								},
 								"sink": {
-									"name": "status"
+									"name": "status",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['request_id']"
+								},
+								"sink": {
+									"name": "request_id",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['count']"
+								},
+								"sink": {
+									"name": "count",
+									"type": "Int16"
 								}
 							}
 						],
@@ -69,14 +161,19 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "R_MarketHolidays_ls",
+						"referenceName": "R_Exchanges",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "MarketHolidays_ls",
-						"type": "DatasetReference"
+						"referenceName": "ds_adls2_parq_stocks",
+						"type": "DatasetReference",
+						"parameters": {
+							"ds_blobName": "stocks",
+							"ds_fileName": "dim_exchanges",
+							"ds_directoryName": "dim"
+						}
 					}
 				]
 			}

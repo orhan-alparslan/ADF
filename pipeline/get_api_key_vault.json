@@ -213,12 +213,6 @@
 						"referenceName": "R_fact_stocks_grouped_daily_bars",
 						"type": "DatasetReference"
 					}
-				],
-				"outputs": [
-					{
-						"referenceName": "factstocksgroupeddailybars",
-						"type": "DatasetReference"
-					}
 				]
 			}
 		],

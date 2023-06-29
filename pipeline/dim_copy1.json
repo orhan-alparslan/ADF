@@ -72,12 +72,6 @@
 						"referenceName": "R_MarketHolidays_ls",
 						"type": "DatasetReference"
 					}
-				],
-				"outputs": [
-					{
-						"referenceName": "MarketHolidays_ls",
-						"type": "DatasetReference"
-					}
 				]
 			}
 		],

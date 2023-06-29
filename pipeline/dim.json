@@ -22,9 +22,13 @@
 						"requestMethod": "GET"
 					},
 					"sink": {
-						"type": "AzureTableSink",
-						"azureTableInsertType": "merge",
-						"writeBatchSize": 10000
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
 					},
 					"enableStaging": false,
 					"translator": {
@@ -74,7 +78,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Conditions",
+						"referenceName": "ds_adls2_parq_stocks",
 						"type": "DatasetReference"
 					}
 				]
@@ -181,12 +185,6 @@
 						"referenceName": "R_Exchanges",
 						"type": "DatasetReference"
 					}
-				],
-				"outputs": [
-					{
-						"referenceName": "Exchanges",
-						"type": "DatasetReference"
-					}
 				]
 			},
 			{
@@ -257,12 +255,6 @@
 				"inputs": [
 					{
 						"referenceName": "R_MarketHolidays",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "MarketHolidays",
 						"type": "DatasetReference"
 					}
 				]
@@ -377,12 +369,6 @@
 						"referenceName": "R_MarketStatus",
 						"type": "DatasetReference"
 					}
-				],
-				"outputs": [
-					{
-						"referenceName": "MarketStatus",
-						"type": "DatasetReference"
-					}
 				]
 			},
 			{
@@ -453,12 +439,6 @@
 				"inputs": [
 					{
 						"referenceName": "R_TickerTypes",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "TickerTypes",
 						"type": "DatasetReference"
 					}
 				]

@@ -2,7 +2,7 @@
 	"name": "R_Conditions",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_polygon_options_free_01",
+			"referenceName": "ls_polygon_stocks",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
