@@ -1,5 +1,5 @@
 {
-	"name": "R_TickerTypes",
+	"name": "R_Tickers",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_polygon_stocks",
@@ -11,9 +11,8 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "v3/reference/tickers/types"
+			"relativeUrl": "v3/reference/tickers?sort=ticker"
 		},
 		"schema": []
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }
