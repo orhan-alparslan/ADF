@@ -20,12 +20,6 @@
 						"httpRequestTimeout": "00:01:40",
 						"requestInterval": "00.00:00:00.010",
 						"requestMethod": "GET",
-						"additionalHeaders": {
-							"Authorization": {
-								"value": "@pipeline().parameters.Key",
-								"type": "Expression"
-							}
-						},
 						"paginationRules": {
 							"supportRFC5988": "true"
 						}
@@ -186,7 +180,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "R_fact_stocks_grouped_daily_bars",
+						"referenceName": "R_fact_stocks_aggregates",
 						"type": "DatasetReference"
 					}
 				],
