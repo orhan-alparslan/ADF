@@ -357,7 +357,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "R_fact_stocks_aggregates",
+						"referenceName": "R_fact_stocks_aggregates_10yr",
 						"type": "DatasetReference"
 					}
 				],
