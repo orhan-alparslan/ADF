@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy API to Table fact_stocks_grouped_daily_bars",
+				"name": "Copy API to Table fact_stocks_aggregates",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -39,106 +39,110 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['results'][0]['id']"
+									"path": "$['ticker']"
 								},
 								"sink": {
-									"name": "id"
+									"name": "ticker",
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['publisher']['name']"
+									"path": "$['queryCount']"
 								},
 								"sink": {
-									"name": "publisher_name"
+									"name": "queryCount",
+									"type": "Int16"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['publisher']['homepage_url']"
+									"path": "$['resultsCount']"
 								},
 								"sink": {
-									"name": "publisher_url"
+									"name": "resultsCount",
+									"type": "Int16"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['publisher']['logo_url']"
+									"path": "$['adjusted']"
 								},
 								"sink": {
-									"name": "publisher_logo_url"
+									"name": "adjusted",
+									"type": "Boolean"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['publisher']['favicon_url']"
+									"path": "['v']"
 								},
 								"sink": {
-									"name": "publisher_favicon_url"
+									"name": "v",
+									"type": "Int16"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['title']"
+									"path": "['vw']"
 								},
 								"sink": {
-									"name": "title"
+									"name": "vw",
+									"type": "Decimal"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['author']"
+									"path": "['o']"
 								},
 								"sink": {
-									"name": "author"
+									"name": "o",
+									"type": "Decimal"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['published_utc']"
+									"path": "['c']"
 								},
 								"sink": {
-									"name": "published_utc"
+									"name": "c",
+									"type": "Decimal"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['article_url']"
+									"path": "['h']"
 								},
 								"sink": {
-									"name": "article_url"
+									"name": "h",
+									"type": "Decimal"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['tickers'][0]"
+									"path": "['l']"
 								},
 								"sink": {
-									"name": "tickers"
+									"name": "l",
+									"type": "Decimal"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['image_url']"
+									"path": "['t']"
 								},
 								"sink": {
-									"name": "image_url"
+									"name": "t",
+									"type": "Int64"
 								}
 							},
 							{
 								"source": {
-									"path": "$['results'][0]['description']"
+									"path": "['n']"
 								},
 								"sink": {
-									"name": "description"
-								}
-							},
-							{
-								"source": {
-									"path": "$['results'][0]['keywords'][0]"
-								},
-								"sink": {
-									"name": "keywords"
+									"name": "n",
+									"type": "Int16"
 								}
 							},
 							{
@@ -146,7 +150,8 @@
 									"path": "$['status']"
 								},
 								"sink": {
-									"name": "status"
+									"name": "status",
+									"type": "String"
 								}
 							},
 							{
@@ -154,7 +159,8 @@
 									"path": "$['request_id']"
 								},
 								"sink": {
-									"name": "request_id"
+									"name": "request_id",
+									"type": "String"
 								}
 							},
 							{
@@ -162,15 +168,8 @@
 									"path": "$['count']"
 								},
 								"sink": {
-									"name": "count"
-								}
-							},
-							{
-								"source": {
-									"path": "$['next_url']"
-								},
-								"sink": {
-									"name": "next_url"
+									"name": "count",
+									"type": "Int16"
 								}
 							}
 						],
@@ -190,7 +189,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_blobName": "stocks",
-							"ds_fileName": "fact_stocks_grouped_daily_bars",
+							"ds_fileName": "fact_stocks_aggregates",
 							"ds_directoryName": "fact"
 						}
 					}
