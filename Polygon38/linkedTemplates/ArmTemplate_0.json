@@ -440,7 +440,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_aggregates')]",
+			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_aggregates_10yr')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -454,7 +454,7 @@
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
-					"relativeUrl": "v2/aggs/ticker/AAPL/range/1/minute/2023-01-09/2023-01-09?adjusted=true&sort=asc&limit=50000"
+					"relativeUrl": "v2/aggs/ticker/AAPL/range/1/minute/2013-01-09/2023-06-28?adjusted=true&sort=asc&limit=50000"
 				},
 				"schema": []
 			},

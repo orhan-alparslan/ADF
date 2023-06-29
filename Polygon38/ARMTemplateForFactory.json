@@ -1085,7 +1085,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "R_fact_stocks_aggregates",
+								"referenceName": "R_fact_stocks_aggregates_10yr",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -1111,7 +1111,7 @@
 				"lastPublishTime": "2023-03-21T20:56:23Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_aggregates')]",
+				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_aggregates_10yr')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
 			]
 		},
@@ -1477,7 +1477,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "R_fact_stocks_aggregates",
+								"referenceName": "R_fact_stocks_aggregates_10yr",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -1505,7 +1505,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_grouped_daily_bars')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]",
-				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_aggregates')]"
+				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_aggregates_10yr')]"
 			]
 		},
 		{
@@ -1993,7 +1993,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_aggregates')]",
+			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_aggregates_10yr')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2007,7 +2007,7 @@
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
-					"relativeUrl": "v2/aggs/ticker/AAPL/range/1/minute/2023-01-09/2023-01-09?adjusted=true&sort=asc&limit=50000"
+					"relativeUrl": "v2/aggs/ticker/AAPL/range/1/minute/2013-01-09/2023-06-28?adjusted=true&sort=asc&limit=50000"
 				},
 				"schema": []
 			},
