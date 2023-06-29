@@ -170,6 +170,8 @@
 					{
 						"name": "TickerTypes API to Parquet Dynamic",
 						"type": "Copy",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -265,6 +267,8 @@
 					{
 						"name": "Market_Holidays API to Parquet Dynamic_copy2",
 						"type": "Copy",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -378,6 +382,8 @@
 					{
 						"name": "Tickers API to Parquet Dynamic_copy3",
 						"type": "Copy",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
