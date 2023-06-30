@@ -1,0 +1,85 @@
+{
+	"name": "dim_tickers",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy Tickers 4900",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET",
+						"paginationRules": {
+							"AbsoluteUrl": "$.next_url"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings",
+							"maxRowsPerFile": 4900,
+							"fileNamePrefix": ""
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "R_facts",
+						"type": "DatasetReference",
+						"parameters": {
+							"RelativeURL": {
+								"value": "@concat(pipeline().parameters.url_1endpoint,pipeline().parameters.url_2limit,pipeline().parameters.url_3sort)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_adls2_parq_stocks",
+						"type": "DatasetReference",
+						"parameters": {
+							"ds_blobName": "stocks",
+							"ds_fileName": "tickers",
+							"ds_directoryName": "dim_tickers",
+							"ds_fileName2": {
+								"value": "@concat('_',pipeline().TriggerTime)",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"url_1endpoint": {
+				"type": "string",
+				"defaultValue": "v3/reference/tickers"
+			},
+			"url_2limit": {
+				"type": "string",
+				"defaultValue": "?limit=1000"
+			},
+			"url_3sort": {
+				"type": "string",
+				"defaultValue": "&sort=ticker"
+			}
+		},
+		"annotations": []
+	}
+}
