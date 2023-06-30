@@ -5,13 +5,22 @@
 			"referenceName": "ls_polygon_stocks",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"RelativeURL": {
+				"type": "string",
+				"defaultValue": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
+			}
+		},
 		"folder": {
 			"name": "input/rest"
 		},
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
+			"relativeUrl": {
+				"value": "@dataset().RelativeURL",
+				"type": "Expression"
+			}
 		},
 		"schema": []
 	},
