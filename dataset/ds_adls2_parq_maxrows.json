@@ -1,5 +1,5 @@
 {
-	"name": "ds_adls2_parq",
+	"name": "ds_adls2_parq_maxrows",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls2_ak_01",
@@ -9,13 +9,7 @@
 			"ds_blobName": {
 				"type": "string"
 			},
-			"ds_fileName": {
-				"type": "string"
-			},
 			"ds_directoryName": {
-				"type": "string"
-			},
-			"ds_fileName2": {
 				"type": "string"
 			}
 		},
@@ -27,10 +21,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": {
-					"value": "@concat(dataset().ds_fileName,'_', dataset().ds_fileName2)",
-					"type": "Expression"
-				},
 				"folderPath": {
 					"value": "@dataset().ds_directoryName",
 					"type": "Expression"

@@ -164,7 +164,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_adls2_parq_stocks",
+						"referenceName": "ds_adls2_parq",
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_blobName": "stocks",
@@ -289,7 +289,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_adls2_parq_stocks",
+						"referenceName": "ds_adls2_parq",
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_blobName": "stocks",
@@ -405,7 +405,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_adls2_parq_stocks",
+						"referenceName": "ds_adls2_parq",
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_blobName": "stocks",
@@ -611,7 +611,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_adls2_parq_stocks",
+						"referenceName": "ds_adls2_parq",
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_blobName": "stocks",
