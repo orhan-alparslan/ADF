@@ -728,7 +728,157 @@
 									"fileNamePrefix": ""
 								}
 							},
-							"enableStaging": false
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['ticker']"
+										},
+										"sink": {
+											"name": "ticker",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['name']"
+										},
+										"sink": {
+											"name": "name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['market']"
+										},
+										"sink": {
+											"name": "market",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['locale']"
+										},
+										"sink": {
+											"name": "locale",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['primary_exchange']"
+										},
+										"sink": {
+											"name": "primary_exchange",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['type']"
+										},
+										"sink": {
+											"name": "type",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['active']"
+										},
+										"sink": {
+											"name": "active",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['currency_name']"
+										},
+										"sink": {
+											"name": "currency_name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['cik']"
+										},
+										"sink": {
+											"name": "cik",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['composite_figi']"
+										},
+										"sink": {
+											"name": "composite_figi",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['share_class_figi']"
+										},
+										"sink": {
+											"name": "share_class_figi",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['last_updated_utc']"
+										},
+										"sink": {
+											"name": "last_updated_utc",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['next_url']"
+										},
+										"sink": {
+											"name": "next_url",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['results']"
+							}
 						},
 						"inputs": [
 							{
