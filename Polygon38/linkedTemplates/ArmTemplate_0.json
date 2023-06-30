@@ -109,7 +109,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": {
-							"value": "@dataset().ds_fileName2",
+							"value": "@concat(dataset().ds_fileName,'_', dataset().ds_fileName2)",
 							"type": "Expression"
 						},
 						"folderPath": {

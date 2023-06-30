@@ -1118,7 +1118,7 @@
 									"ds_fileName": "fact_stocks_aggregates",
 									"ds_directoryName": "fact",
 									"ds_fileName2": {
-										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"value": "@pipeline().TriggerTime",
 										"type": "Expression"
 									}
 								}
@@ -2116,7 +2116,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": {
-							"value": "@dataset().ds_fileName2",
+							"value": "@concat(dataset().ds_fileName,'_', dataset().ds_fileName2)",
 							"type": "Expression"
 						},
 						"folderPath": {
