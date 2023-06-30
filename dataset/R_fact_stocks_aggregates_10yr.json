@@ -11,7 +11,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "v2/aggs/ticker/AAPL/range/1/minute/2023-01-09/2023-06-28?adjusted=true&sort=asc&limit=1000"
+			"relativeUrl": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
 		},
 		"schema": []
 	},
