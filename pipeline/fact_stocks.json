@@ -195,7 +195,7 @@
 							"ds_fileName": "fact_stocks_aggregates",
 							"ds_directoryName": "fact",
 							"ds_fileName2": {
-								"value": "@concat(pipeline().TriggerTime, 'concated') ",
+								"value": "@pipeline().TriggerTime",
 								"type": "Expression"
 							}
 						}
