@@ -225,7 +225,11 @@
 						"parameters": {
 							"ds_blobName": "test",
 							"ds_fileName": "test",
-							"ds_directoryName": "test"
+							"ds_directoryName": "test",
+							"ds_fileName2": {
+								"value": "@concat(pipeline().TriggerTime, 'concated') ",
+								"type": "Expression"
+							}
 						}
 					}
 				]
