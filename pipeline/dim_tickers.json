@@ -55,12 +55,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_blobName": "stocks",
-							"ds_fileName": "tickers",
-							"ds_directoryName": "dim_tickers",
-							"ds_fileName2": {
-								"value": "@concat('_',pipeline().TriggerTime)",
-								"type": "Expression"
-							}
+							"ds_directoryName": "dim_tickers"
 						}
 					}
 				]
