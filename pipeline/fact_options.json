@@ -197,7 +197,11 @@
 						"parameters": {
 							"ds_blobName": "stocks",
 							"ds_fileName": "fact_stocks_grouped_daily_bars",
-							"ds_directoryName": "fact"
+							"ds_directoryName": "fact",
+							"ds_fileName2": {
+								"value": "@concat(pipeline().TriggerTime, 'concated') ",
+								"type": "Expression"
+							}
 						}
 					}
 				]
