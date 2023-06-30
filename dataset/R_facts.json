@@ -1,5 +1,5 @@
 {
-	"name": "R_fact_stocks_aggregates_10yr",
+	"name": "R_facts",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_polygon_stocks",
