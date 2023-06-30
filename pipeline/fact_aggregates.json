@@ -1,9 +1,9 @@
 {
-	"name": "fact_stocks",
+	"name": "fact_aggregates",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy API to Table fact_stocks_aggregates",
+				"name": "REST fact_stocks_aggregates",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -179,10 +179,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "R_fact_stocks_aggregates_10yr",
+						"referenceName": "R_facts",
 						"type": "DatasetReference",
 						"parameters": {
-							"RelativeURL": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
+							"RelativeURL": {
+								"value": "@concat(pipeline().parameters.url_1aggregates,pipeline().parameters.url_2ticker,pipeline().parameters.url_3candle_range,'/',pipeline().parameters.url_4date_start,'/',pipeline().parameters.url_5date_end,pipeline().parameters.url_6param,pipeline().parameters.url_7limit)",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -192,8 +195,11 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_blobName": "stocks",
-							"ds_fileName": "fact_stocks_aggregates",
-							"ds_directoryName": "fact",
+							"ds_fileName": {
+								"value": "@concat(pipeline().parameters.url_2ticker,'_',pipeline().parameters.url_4date_start,'_',pipeline().parameters.url_5date_end)",
+								"type": "Expression"
+							},
+							"ds_directoryName": "fact_aggregates",
 							"ds_fileName2": {
 								"value": "@pipeline().TriggerTime",
 								"type": "Expression"
@@ -203,6 +209,36 @@
 				]
 			}
 		],
+		"parameters": {
+			"url_1aggregates": {
+				"type": "string",
+				"defaultValue": "v2/aggs/ticker/"
+			},
+			"url_6param": {
+				"type": "string",
+				"defaultValue": "?adjusted=true&sort=asc"
+			},
+			"url_7limit": {
+				"type": "string",
+				"defaultValue": "&limit=100"
+			},
+			"url_4date_start": {
+				"type": "string",
+				"defaultValue": "2023-06-28"
+			},
+			"url_3candle_range": {
+				"type": "string",
+				"defaultValue": "/range/1/minute"
+			},
+			"url_2ticker": {
+				"type": "string",
+				"defaultValue": "AAPL"
+			},
+			"url_5date_end": {
+				"type": "string",
+				"defaultValue": "2023-06-28"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2023-03-21T20:56:23Z"
 	},
