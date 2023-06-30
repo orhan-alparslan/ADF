@@ -220,11 +220,11 @@
 			},
 			"url_7limit": {
 				"type": "string",
-				"defaultValue": "&limit=100"
+				"defaultValue": "&limit=50000"
 			},
 			"url_4date_start": {
 				"type": "string",
-				"defaultValue": "2023-06-28"
+				"defaultValue": "2018-06-29"
 			},
 			"url_3candle_range": {
 				"type": "string",
