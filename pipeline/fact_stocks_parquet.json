@@ -178,7 +178,11 @@
 						"parameters": {
 							"ds_blobName": "stocks",
 							"ds_fileName": "fact_stocks_grouped_daily_bars",
-							"ds_directoryName": "fact"
+							"ds_directoryName": "fact",
+							"ds_fileName2": {
+								"value": "@concat(pipeline().TriggerTime, 'concated') ",
+								"type": "Expression"
+							}
 						}
 					}
 				]
@@ -358,7 +362,10 @@
 				"inputs": [
 					{
 						"referenceName": "R_fact_stocks_aggregates_10yr",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"RelativeURL": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
+						}
 					}
 				],
 				"outputs": [
@@ -368,7 +375,11 @@
 						"parameters": {
 							"ds_blobName": "stocks",
 							"ds_fileName": "fact_stocks_aggregated_bars",
-							"ds_directoryName": "fact"
+							"ds_directoryName": "fact",
+							"ds_fileName2": {
+								"value": "@concat(pipeline().TriggerTime, 'concated') ",
+								"type": "Expression"
+							}
 						}
 					}
 				]

@@ -19,10 +19,7 @@
 						"type": "RestSource",
 						"httpRequestTimeout": "00:01:40",
 						"requestInterval": "00.00:00:00.010",
-						"requestMethod": "GET",
-						"paginationRules": {
-							"supportRFC5988": "true"
-						}
+						"requestMethod": "GET"
 					},
 					"sink": {
 						"type": "ParquetSink",
@@ -172,7 +169,11 @@
 						"parameters": {
 							"ds_blobName": "stocks",
 							"ds_fileName": "dim_exchanges",
-							"ds_directoryName": "dim"
+							"ds_directoryName": "dim",
+							"ds_fileName2": {
+								"value": "@concat(pipeline().TriggerTime, 'concated') ",
+								"type": "Expression"
+							}
 						}
 					}
 				]
@@ -293,7 +294,11 @@
 						"parameters": {
 							"ds_blobName": "stocks",
 							"ds_fileName": "dim_ticker_types",
-							"ds_directoryName": "dim"
+							"ds_directoryName": "dim",
+							"ds_fileName2": {
+								"value": "@concat(pipeline().TriggerTime, 'concated') ",
+								"type": "Expression"
+							}
 						}
 					}
 				]
@@ -405,7 +410,11 @@
 						"parameters": {
 							"ds_blobName": "stocks",
 							"ds_fileName": "dim_market_holidays_upcoming",
-							"ds_directoryName": "dim"
+							"ds_directoryName": "dim",
+							"ds_fileName2": {
+								"value": "@concat(pipeline().TriggerTime, 'concated') ",
+								"type": "Expression"
+							}
 						}
 					}
 				]
@@ -607,7 +616,11 @@
 						"parameters": {
 							"ds_blobName": "stocks",
 							"ds_fileName": "dim_tickers",
-							"ds_directoryName": "dim"
+							"ds_directoryName": "dim",
+							"ds_fileName2": {
+								"value": "@concat(pipeline().TriggerTime, 'concated') ",
+								"type": "Expression"
+							}
 						}
 					}
 				]
