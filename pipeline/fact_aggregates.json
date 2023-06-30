@@ -196,7 +196,7 @@
 						"parameters": {
 							"ds_blobName": "stocks",
 							"ds_fileName": {
-								"value": "@concat(pipeline().parameters.url_2ticker,'From ',pipeline().parameters.url_4date_start,'Until ',pipeline().parameters.url_5date_end)",
+								"value": "@concat(pipeline().parameters.url_2ticker,'_From_',pipeline().parameters.url_4date_start,'_Until_',pipeline().parameters.url_5date_end)",
 								"type": "Expression"
 							},
 							"ds_directoryName": "fact_aggregates",
