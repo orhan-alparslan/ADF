@@ -1113,7 +1113,7 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": {
-										"value": "@concat(pipeline().parameters.url_2ticker,'From ',pipeline().parameters.url_4date_start,'Until ',pipeline().parameters.url_5date_end)",
+										"value": "@concat(pipeline().parameters.url_2ticker,'_From_',pipeline().parameters.url_4date_start,'_Until_',pipeline().parameters.url_5date_end)",
 										"type": "Expression"
 									},
 									"ds_directoryName": "fact_aggregates",
@@ -1141,11 +1141,11 @@
 					},
 					"url_7limit": {
 						"type": "string",
-						"defaultValue": "&limit=100"
+						"defaultValue": "&limit=50000"
 					},
 					"url_4date_start": {
 						"type": "string",
-						"defaultValue": "2023-06-28"
+						"defaultValue": "2018-06-29"
 					},
 					"url_3candle_range": {
 						"type": "string",
