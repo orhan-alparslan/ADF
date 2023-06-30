@@ -443,7 +443,30 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_aggregates_10yr')]",
+			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_grouped_daily_bars')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_facts')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -467,29 +490,6 @@
 						"value": "@dataset().RelativeURL",
 						"type": "Expression"
 					}
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_grouped_daily_bars')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_polygon_stocks",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "input/rest"
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {
-					"relativeUrl": "v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true"
 				},
 				"schema": []
 			},

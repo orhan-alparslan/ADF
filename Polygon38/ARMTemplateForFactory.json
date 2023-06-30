@@ -690,6 +690,261 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/fact_aggregates')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "REST fact_stocks_aggregates",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"AbsoluteUrl": "$.next_url"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['v']"
+										},
+										"sink": {
+											"name": "v",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "[['vw']"
+										},
+										"sink": {
+											"name": "vw",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "[['o']"
+										},
+										"sink": {
+											"name": "o",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "[['c']"
+										},
+										"sink": {
+											"name": "c",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "[['h']"
+										},
+										"sink": {
+											"name": "h",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "[['l']"
+										},
+										"sink": {
+											"name": "l",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"path": "[['t']"
+										},
+										"sink": {
+											"name": "t",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['n']"
+										},
+										"sink": {
+											"name": "n",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ticker']"
+										},
+										"sink": {
+											"name": "ticker",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['queryCount']"
+										},
+										"sink": {
+											"name": "queryCount",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['resultsCount']"
+										},
+										"sink": {
+											"name": "resultsCount",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['adjusted']"
+										},
+										"sink": {
+											"name": "adjusted",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['request_id']"
+										},
+										"sink": {
+											"name": "request_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['count']"
+										},
+										"sink": {
+											"name": "count",
+											"type": "Int32"
+										}
+									}
+								],
+								"collectionReference": "$['results']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "R_facts",
+								"type": "DatasetReference",
+								"parameters": {
+									"RelativeURL": {
+										"value": "@concat(pipeline().parameters.url_1aggregates,pipeline().parameters.url_2ticker,pipeline().parameters.url_3candle_range,'/',pipeline().parameters.url_4date_start,'/',pipeline().parameters.url_5date_end,pipeline().parameters.url_6param,pipeline().parameters.url_7limit)",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_parq_stocks",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_blobName": "stocks",
+									"ds_fileName": {
+										"value": "@concat(pipeline().parameters.url_2ticker,'_',pipeline().parameters.url_4date_start,'_',pipeline().parameters.url_5date_end)",
+										"type": "Expression"
+									},
+									"ds_directoryName": "fact_aggregates",
+									"ds_fileName2": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"url_1aggregates": {
+						"type": "string",
+						"defaultValue": "v2/aggs/ticker/"
+					},
+					"url_6param": {
+						"type": "string",
+						"defaultValue": "?adjusted=true&sort=asc"
+					},
+					"url_7limit": {
+						"type": "string",
+						"defaultValue": "&limit=100"
+					},
+					"url_4date_start": {
+						"type": "string",
+						"defaultValue": "2023-06-28"
+					},
+					"url_3candle_range": {
+						"type": "string",
+						"defaultValue": "/range/1/minute"
+					},
+					"url_2ticker": {
+						"type": "string",
+						"defaultValue": "AAPL"
+					},
+					"url_5date_end": {
+						"type": "string",
+						"defaultValue": "2023-06-28"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-21T20:56:23Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_facts')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/fact_options')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -917,628 +1172,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_grouped_daily_bars')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/fact_stocks')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy API to Table fact_stocks_aggregates",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET",
-								"paginationRules": {
-									"AbsoluteUrl": "$.next_url"
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"path": "[['v']"
-										},
-										"sink": {
-											"name": "v",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"path": "[['vw']"
-										},
-										"sink": {
-											"name": "vw",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "[['o']"
-										},
-										"sink": {
-											"name": "o",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "[['c']"
-										},
-										"sink": {
-											"name": "c",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "[['h']"
-										},
-										"sink": {
-											"name": "h",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "[['l']"
-										},
-										"sink": {
-											"name": "l",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "[['t']"
-										},
-										"sink": {
-											"name": "t",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"path": "[['n']"
-										},
-										"sink": {
-											"name": "n",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"path": "$['ticker']"
-										},
-										"sink": {
-											"name": "ticker",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['queryCount']"
-										},
-										"sink": {
-											"name": "queryCount",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"path": "$['resultsCount']"
-										},
-										"sink": {
-											"name": "resultsCount",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"path": "$['adjusted']"
-										},
-										"sink": {
-											"name": "adjusted",
-											"type": "Boolean"
-										}
-									},
-									{
-										"source": {
-											"path": "$['status']"
-										},
-										"sink": {
-											"name": "status",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['request_id']"
-										},
-										"sink": {
-											"name": "request_id",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['count']"
-										},
-										"sink": {
-											"name": "count",
-											"type": "Int32"
-										}
-									}
-								],
-								"collectionReference": "$['results']",
-								"mapComplexValuesToString": true
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "R_fact_stocks_aggregates_10yr",
-								"type": "DatasetReference",
-								"parameters": {
-									"RelativeURL": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_adls2_parq_stocks",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_blobName": "stocks",
-									"ds_fileName": "fact_stocks_aggregates",
-									"ds_directoryName": "fact",
-									"ds_fileName2": {
-										"value": "@pipeline().TriggerTime",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2023-03-21T20:56:23Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_aggregates_10yr')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/fact_stocks_parquet')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "fact_stocks_grouped_daily_bars",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET"
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"path": "$['queryCount']"
-										},
-										"sink": {
-											"name": "queryCount",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"path": "$['resultsCount']"
-										},
-										"sink": {
-											"name": "resultsCount",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"path": "$['adjusted']"
-										},
-										"sink": {
-											"name": "adjusted",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['T']"
-										},
-										"sink": {
-											"name": "T",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['v']"
-										},
-										"sink": {
-											"name": "v",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['vw']"
-										},
-										"sink": {
-											"name": "vw",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['o']"
-										},
-										"sink": {
-											"name": "o",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['c']"
-										},
-										"sink": {
-											"name": "c",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['h']"
-										},
-										"sink": {
-											"name": "h",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['l']"
-										},
-										"sink": {
-											"name": "l",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['n']"
-										},
-										"sink": {
-											"name": "n",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['status']"
-										},
-										"sink": {
-											"name": "status",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['request_id']"
-										},
-										"sink": {
-											"name": "request_id",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['count']"
-										},
-										"sink": {
-											"name": "count",
-											"type": "Int64"
-										}
-									}
-								],
-								"collectionReference": "$['results']",
-								"mapComplexValuesToString": false
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "R_fact_stocks_grouped_daily_bars",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_adls2_parq_stocks",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_blobName": "stocks",
-									"ds_fileName": "fact_stocks_grouped_daily_bars",
-									"ds_directoryName": "fact",
-									"ds_fileName2": {
-										"value": "@concat(pipeline().TriggerTime, 'concated') ",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					},
-					{
-						"name": "fact_stocks_aggregates_bars",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET"
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"path": "$['ticker']"
-										},
-										"sink": {
-											"name": "ticker",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['queryCount']"
-										},
-										"sink": {
-											"name": "queryCount",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"path": "$['resultsCount']"
-										},
-										"sink": {
-											"name": "resultsCount",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"path": "$['adjusted']"
-										},
-										"sink": {
-											"name": "adjusted",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['v']"
-										},
-										"sink": {
-											"name": "v",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['vw']"
-										},
-										"sink": {
-											"name": "vw",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['o']"
-										},
-										"sink": {
-											"name": "o",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['c']"
-										},
-										"sink": {
-											"name": "c",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['h']"
-										},
-										"sink": {
-											"name": "h",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['l']"
-										},
-										"sink": {
-											"name": "l",
-											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['t']"
-										},
-										"sink": {
-											"name": "t",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"path": "$['results'][0]['n']"
-										},
-										"sink": {
-											"name": "n",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"path": "$['status']"
-										},
-										"sink": {
-											"name": "status",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['request_id']"
-										},
-										"sink": {
-											"name": "request_id",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"path": "$['count']"
-										},
-										"sink": {
-											"name": "count",
-											"type": "Int64"
-										}
-									}
-								],
-								"collectionReference": "$['results']",
-								"mapComplexValuesToString": false
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "R_fact_stocks_aggregates_10yr",
-								"type": "DatasetReference",
-								"parameters": {
-									"RelativeURL": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_adls2_parq_stocks",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_blobName": "stocks",
-									"ds_fileName": "fact_stocks_aggregated_bars",
-									"ds_directoryName": "fact",
-									"ds_fileName2": {
-										"value": "@concat(pipeline().TriggerTime, 'concated') ",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2023-03-23T19:14:06Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_grouped_daily_bars')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]",
-				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_aggregates_10yr')]"
 			]
 		},
 		{
@@ -2030,7 +1663,30 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_aggregates_10yr')]",
+			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_grouped_daily_bars')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_polygon_stocks",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/rest"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/R_facts')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2054,29 +1710,6 @@
 						"value": "@dataset().RelativeURL",
 						"type": "Expression"
 					}
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/R_fact_stocks_grouped_daily_bars')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_polygon_stocks",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "input/rest"
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {
-					"relativeUrl": "v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true"
 				},
 				"schema": []
 			},
