@@ -63,10 +63,7 @@
 								"type": "RestSource",
 								"httpRequestTimeout": "00:01:40",
 								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET",
-								"paginationRules": {
-									"supportRFC5988": "true"
-								}
+								"requestMethod": "GET"
 							},
 							"sink": {
 								"type": "ParquetSink",
@@ -217,7 +214,11 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": "dim_exchanges",
-									"ds_directoryName": "dim"
+									"ds_directoryName": "dim",
+									"ds_fileName2": {
+										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"type": "Expression"
+									}
 								}
 							}
 						]
@@ -339,7 +340,11 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": "dim_ticker_types",
-									"ds_directoryName": "dim"
+									"ds_directoryName": "dim",
+									"ds_fileName2": {
+										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"type": "Expression"
+									}
 								}
 							}
 						]
@@ -452,7 +457,11 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": "dim_market_holidays_upcoming",
-									"ds_directoryName": "dim"
+									"ds_directoryName": "dim",
+									"ds_fileName2": {
+										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"type": "Expression"
+									}
 								}
 							}
 						]
@@ -655,7 +664,11 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": "dim_tickers",
-									"ds_directoryName": "dim"
+									"ds_directoryName": "dim",
+									"ds_fileName2": {
+										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"type": "Expression"
+									}
 								}
 							}
 						]
@@ -878,7 +891,11 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": "fact_stocks_grouped_daily_bars",
-									"ds_directoryName": "fact"
+									"ds_directoryName": "fact",
+									"ds_fileName2": {
+										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"type": "Expression"
+									}
 								}
 							}
 						]
@@ -1087,7 +1104,9 @@
 							{
 								"referenceName": "R_fact_stocks_aggregates_10yr",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"RelativeURL": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
+								}
 							}
 						],
 						"outputs": [
@@ -1097,7 +1116,11 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": "fact_stocks_aggregates",
-									"ds_directoryName": "fact"
+									"ds_directoryName": "fact",
+									"ds_fileName2": {
+										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"type": "Expression"
+									}
 								}
 							}
 						]
@@ -1298,7 +1321,11 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": "fact_stocks_grouped_daily_bars",
-									"ds_directoryName": "fact"
+									"ds_directoryName": "fact",
+									"ds_fileName2": {
+										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"type": "Expression"
+									}
 								}
 							}
 						]
@@ -1479,7 +1506,9 @@
 							{
 								"referenceName": "R_fact_stocks_aggregates_10yr",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"RelativeURL": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
+								}
 							}
 						],
 						"outputs": [
@@ -1489,7 +1518,11 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": "fact_stocks_aggregated_bars",
-									"ds_directoryName": "fact"
+									"ds_directoryName": "fact",
+									"ds_fileName2": {
+										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"type": "Expression"
+									}
 								}
 							}
 						]
@@ -1739,7 +1772,11 @@
 								"parameters": {
 									"ds_blobName": "test",
 									"ds_fileName": "test",
-									"ds_directoryName": "test"
+									"ds_directoryName": "test",
+									"ds_fileName2": {
+										"value": "@concat(pipeline().TriggerTime, 'concated') ",
+										"type": "Expression"
+									}
 								}
 							}
 						]
@@ -2001,13 +2038,22 @@
 					"referenceName": "ls_polygon_stocks",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"RelativeURL": {
+						"type": "string",
+						"defaultValue": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
+					}
+				},
 				"folder": {
 					"name": "input/rest"
 				},
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
-					"relativeUrl": "v2/aggs/ticker/AAPL/range/1/minute/2023-06-28/2023-06-28?adjusted=true&sort=asc&limit=100"
+					"relativeUrl": {
+						"value": "@dataset().RelativeURL",
+						"type": "Expression"
+					}
 				},
 				"schema": []
 			},
@@ -2056,6 +2102,9 @@
 					},
 					"ds_directoryName": {
 						"type": "string"
+					},
+					"ds_fileName2": {
+						"type": "string"
 					}
 				},
 				"folder": {
@@ -2067,7 +2116,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": {
-							"value": "@dataset().ds_fileName",
+							"value": "@dataset().ds_fileName2",
 							"type": "Expression"
 						},
 						"folderPath": {
