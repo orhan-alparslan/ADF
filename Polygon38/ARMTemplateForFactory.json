@@ -690,6 +690,101 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dim_tickers')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy Tickers 4900",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"AbsoluteUrl": "$.next_url"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings",
+									"maxRowsPerFile": 4900,
+									"fileNamePrefix": ""
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "R_facts",
+								"type": "DatasetReference",
+								"parameters": {
+									"RelativeURL": {
+										"value": "@concat(pipeline().parameters.url_1endpoint,pipeline().parameters.url_2limit,pipeline().parameters.url_3sort)",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_parq_stocks",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_blobName": "stocks",
+									"ds_fileName": "tickers",
+									"ds_directoryName": "dim_tickers",
+									"ds_fileName2": {
+										"value": "@concat('_',pipeline().TriggerTime)",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"url_1endpoint": {
+						"type": "string",
+						"defaultValue": "v3/reference/tickers"
+					},
+					"url_2limit": {
+						"type": "string",
+						"defaultValue": "?limit=1000"
+					},
+					"url_3sort": {
+						"type": "string",
+						"defaultValue": "&sort=ticker"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/R_facts')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/fact_aggregates')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -889,7 +984,7 @@
 								"parameters": {
 									"ds_blobName": "stocks",
 									"ds_fileName": {
-										"value": "@concat(pipeline().parameters.url_2ticker,'_',pipeline().parameters.url_4date_start,'_',pipeline().parameters.url_5date_end)",
+										"value": "@concat(pipeline().parameters.url_2ticker,'From ',pipeline().parameters.url_4date_start,'Until ',pipeline().parameters.url_5date_end)",
 										"type": "Expression"
 									},
 									"ds_directoryName": "fact_aggregates",
