@@ -78,7 +78,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq_stocks')]",
+			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -112,6 +112,48 @@
 							"value": "@concat(dataset().ds_fileName,'_', dataset().ds_fileName2)",
 							"type": "Expression"
 						},
+						"folderPath": {
+							"value": "@dataset().ds_directoryName",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_blobName",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq_maxrows')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_blobName": {
+						"type": "string"
+					},
+					"ds_directoryName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "output"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
 						"folderPath": {
 							"value": "@dataset().ds_directoryName",
 							"type": "Expression"
@@ -495,29 +537,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_polygon_stocks')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_sqldb')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sqldb_ak_01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "input/sql"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_sqldb_ak_01')]"
 			]
 		}
 	]

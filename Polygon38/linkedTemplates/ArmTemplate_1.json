@@ -13,6 +13,27 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_sqldb')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sqldb_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "input/sql"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/dim_copy')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -181,7 +202,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -307,7 +328,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -424,7 +445,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -631,7 +652,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -710,16 +731,11 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq_maxrows",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
-									"ds_fileName": "tickers",
-									"ds_directoryName": "dim_tickers",
-									"ds_fileName2": {
-										"value": "@concat('_',pipeline().TriggerTime)",
-										"type": "Expression"
-									}
+									"ds_directoryName": "dim_tickers"
 								}
 							}
 						]
@@ -942,7 +958,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -1196,7 +1212,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -1452,7 +1468,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "test",
@@ -1523,7 +1539,9 @@
 				"annotations": [],
 				"lastPublishTime": "2023-03-23T23:33:38Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sqldb')]"
+			]
 		}
 	]
 }

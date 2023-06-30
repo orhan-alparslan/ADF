@@ -209,7 +209,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -335,7 +335,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -452,7 +452,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -659,7 +659,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -683,7 +683,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/R_Exchanges')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq')]",
 				"[concat(variables('factoryId'), '/datasets/R_TickerTypes')]",
 				"[concat(variables('factoryId'), '/datasets/R_MarketHolidays')]",
 				"[concat(variables('factoryId'), '/datasets/R_Tickers')]"
@@ -744,16 +744,11 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq_maxrows",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
-									"ds_fileName": "tickers",
-									"ds_directoryName": "dim_tickers",
-									"ds_fileName2": {
-										"value": "@concat('_',pipeline().TriggerTime)",
-										"type": "Expression"
-									}
+									"ds_directoryName": "dim_tickers"
 								}
 							}
 						]
@@ -781,7 +776,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/R_facts')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_maxrows')]"
 			]
 		},
 		{
@@ -979,7 +974,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -1036,7 +1031,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/R_facts')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq')]"
 			]
 		},
 		{
@@ -1236,7 +1231,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "stocks",
@@ -1266,7 +1261,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_grouped_daily_bars')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq')]"
 			]
 		},
 		{
@@ -1495,7 +1490,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_adls2_parq_stocks",
+								"referenceName": "ds_adls2_parq",
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_blobName": "test",
@@ -1522,7 +1517,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/R_fact_stocks_grouped_daily_bars')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq_stocks')]"
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_parq')]"
 			]
 		},
 		{
@@ -1813,7 +1808,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq_stocks')]",
+			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1847,6 +1842,48 @@
 							"value": "@concat(dataset().ds_fileName,'_', dataset().ds_fileName2)",
 							"type": "Expression"
 						},
+						"folderPath": {
+							"value": "@dataset().ds_directoryName",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_blobName",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_ak_01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adls2_parq_maxrows')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_ak_01",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_blobName": {
+						"type": "string"
+					},
+					"ds_directoryName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "output"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
 						"folderPath": {
 							"value": "@dataset().ds_directoryName",
 							"type": "Expression"
